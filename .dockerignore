@@ -1,0 +1,14 @@
+**/.git
+**/.vscode
+**/bin
+**/obj
+**/out
+**/.env
+**/.dockerignore
+Dockerfile
+node_modules
+.gemini
+.agent
+*.db
+*.pdb
+*.zip
