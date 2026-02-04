@@ -1,0 +1,53 @@
+@model DotNetBlueprint.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="generator-container fade-in">
+    <div class="premium-card" style="max-width: 500px; margin: 0 auto;">
+        <h1 class="title-gradient text-center mb-4">Join the Studio</h1>
+        <p class="text-center text-muted mb-5">Create your account to start forging your .NET blueprints.</p>
+
+        <form asp-action="Register" method="post" onsubmit="showLoading('Initializing Studio...')">
+            <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+            
+            <div class="form-group mb-4">
+                <label asp-for="Email" class="form-label">Email Address</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                    <input asp-for="Email" class="form-control" placeholder="name@example.com" />
+                </div>
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+
+            <div class="form-group mb-4">
+                <label asp-for="Password" class="form-label">Password</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                    <input asp-for="Password" class="form-control" placeholder="••••••••" />
+                </div>
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+
+            <div class="form-group mb-4">
+                <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
+                    <input asp-for="ConfirmPassword" class="form-control" placeholder="••••••••" />
+                </div>
+                <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+            </div>
+
+            <button type="submit" class="btn-modern w-100 py-3 mb-4">
+                <span>Create Account</span>
+                <i class="bi bi-person-plus"></i>
+            </button>
+
+            <p class="text-center text-muted small">
+                Already have an account? 
+                <a asp-action="Login" style="color: var(--primary); font-weight: 600; text-decoration: none;">Sign in</a>
+            </p>
+        </form>
+    </div>
+</div>

@@ -6,17 +6,23 @@
 
 <div class="container text-center py-5 fade-in" style="margin-top: 15vh;">
     <h1 class="display-2 fw-bold mb-3 title-gradient">
-        Build with Timeless Precision
+        Architectural Excellence
     </h1>
     <p class="lead text-muted mb-5 fs-5" style="max-width: 600px; margin: 0 auto; line-height: 1.6;">
-        The sophisticated scaffolding tool for .NET professionals. Generate industry-standard architectures with a warm, modern touch.
+        The elite scaffolding tool for .NET professionals. Generate industry-standard blueprints with a sophisticated, modern touch.
     </p>
 
-    <div class="d-flex justify-content-center">
-        <a asp-controller="Generator" asp-action="Create" class="generate-btn" style="max-width: 280px; text-decoration: none;">
-            <span>Get Started Now</span>
+    <div class="d-flex flex-column flex-md-row justify-content-center gap-3 align-items-center">
+        <a asp-controller="Generator" asp-action="Create" class="generate-btn" style="max-width: 320px; text-decoration: none;">
+            <span>@(User.Identity?.IsAuthenticated == true ? "Explore Blueprint Studio" : "Get Started Now")</span>
             <i class="bi bi-arrow-right-short"></i>
         </a>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <a asp-controller="Generator" asp-action="History" class="btn btn-outline-primary rounded-pill px-4 py-3 fw-bold" style="border-width: 2px;">
+                <i class="bi bi-collection me-2"></i>My Blueprints
+            </a>
+        }
     </div>
 
     <div class="row mt-5 pt-5 g-4">

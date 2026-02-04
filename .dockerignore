@@ -10,5 +10,7 @@ node_modules
 .gemini
 .agent
 *.db
+*.db-shm
+*.db-wal
 *.pdb
 *.zip
