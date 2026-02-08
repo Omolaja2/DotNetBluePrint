@@ -38,12 +38,24 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();
 
-// Automatically ensure DB is created on startup
+// Automatically ensure DB is created on startup (Safety Wrapped)
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.EnsureCreated();
+    var services = scope.ServiceProvider;
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    try
+    {
+        var db = services.GetRequiredService<AppDbContext>();
+        logger.LogInformation("Attempting to connect to the database and ensure it exists...");
+        db.Database.EnsureCreated();
+        logger.LogInformation("Database connection successful.");
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "An error occurred during database initialization. The app will attempt to continue, but DB features may fail.");
+    }
 }
+
 
 if (!app.Environment.IsDevelopment())
 {
