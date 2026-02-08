@@ -1,51 +1,216 @@
 ﻿@{
-    ViewData["Title"] = "DotNetBlueprint";
+    ViewData["Title"] = "DotNetBlueprint | Elite Architectural Scaffolding";
 }
 
 <link rel="stylesheet" href="~/css/generator.css" />
 
-<div class="container text-center py-5 fade-in" style="margin-top: 15vh;">
-    <h1 class="display-2 fw-bold mb-3 title-gradient">
-        Architectural Excellence
-    </h1>
-    <p class="lead text-muted mb-5 fs-5" style="max-width: 600px; margin: 0 auto; line-height: 1.6;">
-        The elite scaffolding tool for .NET professionals. Generate industry-standard blueprints with a sophisticated, modern touch.
-    </p>
-
-    <div class="d-flex flex-column flex-md-row justify-content-center gap-3 align-items-center">
-        <a asp-controller="Generator" asp-action="Create" class="generate-btn" style="max-width: 320px; text-decoration: none;">
-            <span>@(User.Identity?.IsAuthenticated == true ? "Explore Blueprint Studio" : "Get Started Now")</span>
-            <i class="bi bi-arrow-right-short"></i>
-        </a>
-        @if (User.Identity?.IsAuthenticated == true)
-        {
-            <a asp-controller="Generator" asp-action="History" class="btn btn-outline-primary rounded-pill px-4 py-3 fw-bold" style="border-width: 2px;">
-                <i class="bi bi-collection me-2"></i>My Blueprints
-            </a>
-        }
+<div class="landing-hero">
+    <div class="hero-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
     </div>
 
-    <div class="row mt-5 pt-5 g-4">
-        <div class="col-md-4">
-            <div class="p-4 rounded-4" style="background: var(--card-bg); border: 1px solid var(--border-color); box-shadow: var(--shadow-soft);">
-                <div class="arch-icon mb-3"><i class="bi bi-check-circle-fill fs-2"></i></div>
-                <h5 class="fw-bold">Pro Architectures</h5>
-                <p class="small text-muted">Clean, Layered, Hexagonal, and more. All optimized for the modern .NET ecosystem.</p>
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 600px;">
+        <!-- Glass Container for Hero Content -->
+        <div class="hero-glass-card fade-in-premium">
+            <!-- Badge -->
+            <div class="hero-badge mb-4">
+                <span class="badge bg-primary rounded-pill me-2">NEW</span>
+                <span>Support for .NET 10 Preview 1 is now live!</span>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="p-4 rounded-4" style="background: var(--card-bg); border: 1px solid var(--border-color); box-shadow: var(--shadow-soft);">
-                <div class="arch-icon mb-3"><i class="bi bi-lightning-charge-fill fs-2"></i></div>
-                <h5 class="fw-bold">Instant Delivery</h5>
-                <p class="small text-muted">Get a ready-to-build solution structure delivered directly to your workstation.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="p-4 rounded-4" style="background: var(--card-bg); border: 1px solid var(--border-color); box-shadow: var(--shadow-soft);">
-                <div class="arch-icon mb-3"><i class="bi bi-cpu-fill fs-2"></i></div>
-                <h5 class="fw-bold">Modern Core</h5>
-                <p class="small text-muted">Full support for .NET 6, 7, 8, 9, and progressive .NET 10 preview features.</p>
+
+            <!-- Hero Heading -->
+            <h1 class="display-1 fw-black mb-4 title-gradient" style="letter-spacing: -3px; line-height: 0.9;">
+                Architectural <br> Excellence.
+            </h1>
+            
+            <p class="lead text-white-50 mb-5 mx-auto" style="max-width: 700px; font-size: 1.25rem; line-height: 1.6;">
+                The elite scaffolding engine for .NET professionals. Generate industry-standard, production-ready project blueprints with a single click.
+            </p>
+
+            <!-- CTA Buttons -->
+            <div class="d-flex flex-column flex-md-row justify-content-center gap-4 align-items-center">
+                <a asp-controller="Generator" asp-action="Create" class="btn-premium text-decoration-none">
+                    <span>@(User.Identity?.IsAuthenticated == true ? "Explore Blueprint Studio" : "Get Started Now")</span>
+                    <i class="bi bi-arrow-right-short fs-4"></i>
+                </a>
+                
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a asp-controller="Generator" asp-action="History" class="btn-outline-premium text-decoration-none">
+                        <i class="bi bi-collection me-2"></i>
+                        <span>My Blueprints</span>
+                    </a>
+                }
+                else
+                {
+                    <a asp-controller="Home" asp-action="Index" class="btn-outline-premium text-decoration-none">
+                        <i class="bi bi-play-circle me-2"></i>
+                        <span>Watch Demo</span>
+                    </a>
+                }
             </div>
         </div>
     </div>
 </div>
+
+<div class="container py-5">
+    <!-- How It Works Section -->
+    <div class="text-center mb-5 mt-5 reveal-on-scroll">
+        <h2 class="fw-black title-gradient display-4 mb-3">Forging Process</h2>
+        <p class="text-muted fs-5">Go from concept to code in less than 60 seconds.</p>
+    </div>
+
+    <div class="row g-4 mb-5 pb-5">
+        <div class="col-md-4 text-center reveal-on-scroll" style="transition-delay: 0.1s;">
+            <div class="step-card">
+                <div class="step-number">01</div>
+                <h5 class="fw-800 mt-4">Select Template</h5>
+                <p class="small text-muted">Choose from Clean Architecture, CQRS, or classic Layered patterns designed by experts.</p>
+            </div>
+        </div>
+        <div class="col-md-4 text-center reveal-on-scroll" style="transition-delay: 0.2s;">
+            <div class="step-card">
+                <div class="step-number">02</div>
+                <h5 class="fw-800 mt-4">Configure Stack</h5>
+                <p class="small text-muted">Pick your .NET version and preferred database provider (SQL Server, PostgreSQL, etc.).</p>
+            </div>
+        </div>
+        <div class="col-md-4 text-center reveal-on-scroll" style="transition-delay: 0.3s;">
+            <div class="step-card">
+                <div class="step-number">03</div>
+                <h5 class="fw-800 mt-4">Instant Download</h5>
+                <p class="small text-muted">A perfectly organized .zip file with projects, solutions, and ready-to-run code is generated.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Features Section -->
+    <div class="row align-items-center mb-5 py-5 reveal-on-scroll">
+        <div class="col-lg-6">
+            <h2 class="display-5 fw-black mb-4">Why use <span class="text-primary">Blueprint Studio?</span></h2>
+            <div class="d-flex gap-3 mb-4">
+                <div class="feature-bullet"><i class="bi bi-check-lg"></i></div>
+                <div>
+                    <h6 class="fw-bold mb-1">Stay Productive</h6>
+                    <p class="small text-muted">Save up to 40 hours of initial setup time per project. We handle the boilerplate so you can focus on business logic.</p>
+                </div>
+            </div>
+            <div class="d-flex gap-3 mb-4">
+                <div class="feature-bullet"><i class="bi bi-check-lg"></i></div>
+                <div>
+                    <h6 class="fw-bold mb-1">Industry Standards</h6>
+                    <p class="small text-muted">Each blueprint follows Microsoft's best practices, including Dependency Injection, Logging, and Repository Patterns.</p>
+                </div>
+            </div>
+            <div class="d-flex gap-3">
+                <div class="feature-bullet"><i class="bi bi-check-lg"></i></div>
+                <div>
+                    <h6 class="fw-bold mb-1">Future Proof</h6>
+                    <p class="small text-muted">Fully compatible with the latest .NET ecosystems, ensuring your code remains relevant for years to come.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mt-5 mt-lg-0">
+            <div class="p-5 rounded-lg position-relative reveal-on-scroll" style="background: var(--primary); color: #fff; border-radius: 40px; overflow: hidden; transition-delay: 0.2s;">
+                <div class="opacity-10 position-absolute" style="top: -20px; right: -20px; font-size: 15rem;">
+                    <i class="bi bi-hammer"></i>
+                </div>
+                <h3 class="fw-black mb-4">Ready to Build?</h3>
+                <p class="mb-4 text-white-50">Join hundreds of developers who have optimized their workflow with Blueprint Studio.</p>
+                <a asp-controller="Generator" asp-action="Create" class="btn btn-light rounded-pill px-4 py-2 fw-bold text-primary">Start Forging Now</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="row g-4 mt-5 pt-5">
+        <div class="col-lg-4 col-md-6 reveal-on-scroll" style="transition-delay: 0.1s;">
+            <div class="feature-card-premium">
+                <div class="feature-icon-box">
+                    <i class="bi bi-shield-lock-fill"></i>
+                </div>
+                <h4 class="fw-bold mb-3">Enterprise Grade</h4>
+                <p class="text-muted">Production-ready architectures including Clean Architecture, Hexagonal, and DDD patterns out of the box.</p>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 reveal-on-scroll" style="transition-delay: 0.2s;">
+            <div class="feature-card-premium">
+                <div class="feature-icon-box">
+                    <i class="bi bi-lightning-charge-fill"></i>
+                </div>
+                <h4 class="fw-bold mb-3">Instant Forge</h4>
+                <p class="text-muted">Zero configuration. Generate entire solution structures with pre-configured dependencies in seconds.</p>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-12 reveal-on-scroll" style="transition-delay: 0.3s;">
+            <div class="feature-card-premium">
+                <div class="feature-icon-box">
+                    <i class="bi bi-box-seam-fill"></i>
+                </div>
+                <h4 class="fw-bold mb-3">Modern Stack</h4>
+                <p class="text-muted">Native support for the latest .NET versions, Entity Framework Core, and multiple database providers.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const observerOptions = {
+            threshold: 0.15
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+    });
+</script>
+
+<style>
+    .step-card {
+        padding: 2.5rem;
+        background: #fff;
+        border: 1px solid var(--border-color);
+        border-radius: 30px;
+        transition: var(--transition);
+        height: 100%;
+    }
+    .step-card:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-lg);
+    }
+    .step-number {
+        width: 50px;
+        height: 50px;
+        background: var(--primary);
+        color: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        font-weight: 900;
+        font-size: 1.25rem;
+    }
+    .feature-bullet {
+        width: 32px;
+        height: 32px;
+        background: rgba(92, 59, 46, 0.1);
+        color: var(--primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-weight: 900;
+    }
+</style>

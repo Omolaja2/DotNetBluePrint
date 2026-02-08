@@ -25,6 +25,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 builder.Services.AddScoped<ProjectGeneratorService>();
 builder.Services.AddScoped<ZipService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+
 
 
 var app = builder.Build();

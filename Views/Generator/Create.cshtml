@@ -218,6 +218,7 @@
                  cards.forEach(c => {
                      if(c.getAttribute('onclick').includes("'" + currentArch + "'")) {
                          c.classList.add('selected');
+                         c.click();
                      }
                  });
              }
@@ -229,10 +230,10 @@
                  dbCards.forEach(c => {
                      if(c.getAttribute('onclick').includes("'" + currentDb + "'")) {
                          c.classList.add('selected');
+                         c.click();
                      }
                  });
              }
         });
     </script>
 }
-

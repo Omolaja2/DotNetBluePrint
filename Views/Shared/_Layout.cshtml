@@ -137,13 +137,16 @@
         </main>
     </div>
 
-    <footer class="footer border-top text-muted pt-4 pb-4 mt-5">
-        <div class="container text-center">
-            <p class="mb-0">
-                &copy; 2026 - <span style="color: var(--primary); font-weight: 700;">Blueprint Studio</span> - Sophisticated .NET Scaffolding
-            </p>
-        </div>
-    </footer>
+    @if (ViewData["HideFooter"] == null || !(bool)ViewData["HideFooter"])
+    {
+        <footer class="footer border-top text-muted pt-4 pb-4 mt-5">
+            <div class="container text-center">
+                <p class="mb-0">
+                    &copy; 2026 - <span style="color: var(--primary); font-weight: 700;">Blueprint Studio</span> - Sophisticated .NET Scaffolding
+                </p>
+            </div>
+        </footer>
+    }
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

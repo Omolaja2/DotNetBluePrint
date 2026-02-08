@@ -95,8 +95,9 @@ C:\Users\USER\Desktop\DotNetBlueprint\obj\Debug\net9.0\rjsmcshtml.dswa.cache.jso
 C:\Users\USER\Desktop\DotNetBlueprint\obj\Debug\net9.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\USER\Desktop\DotNetBlueprint\obj\Debug\net9.0\scopedcss\bundle\DotNetBlueprint.styles.css
 C:\Users\USER\Desktop\DotNetBlueprint\obj\Debug\net9.0\scopedcss\projectbundle\DotNetBlueprint.bundle.scp.css
+C:\Users\USER\Desktop\DotNetBlueprint\obj\Debug\net9.0\compressed\3b56r2o56z-hzk9p0mwn5.gz
 C:\Users\USER\Desktop\DotNetBlueprint\obj\Debug\net9.0\compressed\pc776vgl97-b9sayid5wm.gz
-C:\Users\USER\Desktop\DotNetBlueprint\obj\Debug\net9.0\compressed\7i7nmwc9in-61n19gt1b8.gz
+C:\Users\USER\Desktop\DotNetBlueprint\obj\Debug\net9.0\compressed\7i7nmwc9in-ddbhedwxbg.gz
 C:\Users\USER\Desktop\DotNetBlueprint\obj\Debug\net9.0\compressed\m0n61umvlk-xtxxf3hu2r.gz
 C:\Users\USER\Desktop\DotNetBlueprint\obj\Debug\net9.0\compressed\j8bdzee4tk-bqjiyaj88i.gz
 C:\Users\USER\Desktop\DotNetBlueprint\obj\Debug\net9.0\compressed\1n7z5drcv4-c2jlpeoesf.gz
@@ -169,4 +170,3 @@ C:\Users\USER\Desktop\DotNetBlueprint\obj\Debug\net9.0\refint\DotNetBlueprint.dl
 C:\Users\USER\Desktop\DotNetBlueprint\obj\Debug\net9.0\DotNetBlueprint.pdb
 C:\Users\USER\Desktop\DotNetBlueprint\obj\Debug\net9.0\DotNetBlueprint.genruntimeconfig.cache
 C:\Users\USER\Desktop\DotNetBlueprint\obj\Debug\net9.0\ref\DotNetBlueprint.dll
-C:\Users\USER\Desktop\DotNetBlueprint\obj\Debug\net9.0\compressed\3b56r2o56z-h2bkkh8zp2.gz

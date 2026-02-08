@@ -6,6 +6,10 @@ using DotNetBlueprint.Data;
 using DotNetBlueprint.Models;
 using DotNetBlueprint.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using DotNetBlueprint.Services;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DotNetBlueprint.Controllers
 {
@@ -13,11 +17,13 @@ namespace DotNetBlueprint.Controllers
     {
         private readonly AppDbContext _context;
         private readonly PasswordHasher<User> _passwordHasher;
+        private readonly IEmailService _emailService;
 
-        public AuthController(AppDbContext context)
+        public AuthController(AppDbContext context, IEmailService emailService)
         {
             _context = context;
             _passwordHasher = new PasswordHasher<User>();
+            _emailService = emailService;
         }
 
         [HttpGet]
@@ -40,6 +46,9 @@ namespace DotNetBlueprint.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
+            // Send beautiful welcoming email
+            await _emailService.SendWelcomeEmailAsync(user.Email);
+
             return RedirectToAction("Login");
         }
 
@@ -53,14 +62,12 @@ namespace DotNetBlueprint.Controllers
 
             var user = _context.Users.FirstOrDefault(u => u.Email == model.Email);
             
-            // Check if user exists
             if (user == null)
             {
                 ModelState.AddModelError("", "This email is not registered. Please create an account.");
                 return View(model);
             }
 
-            // Verify password
             var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, model.Password);
             if (result == PasswordVerificationResult.Failed)
             {
@@ -77,7 +84,7 @@ namespace DotNetBlueprint.Controllers
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Create", "Generator");
         }
 
         public async Task<IActionResult> Logout()
