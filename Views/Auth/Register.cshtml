@@ -1,0 +1,77 @@
+@model DotNetBlueprint.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+    ViewData["HideFooter"] = true;
+}
+
+<div class="generator-container">
+    <div class="hero-shapes">
+        <div class="shape shape-1" style="opacity: 0.05;"></div>
+        <div class="shape shape-2" style="opacity: 0.05;"></div>
+    </div>
+
+    <div class="auth-card mx-auto" style="max-width: 520px;">
+        <div class="text-center mb-5">
+            <div class="auth-logo-circle">
+                <img src="/images/logo.png" alt="Blueprint Studio" />
+            </div>
+            <h1 class="title-gradient mb-2" style="font-size: 2.25rem;">Join the Studio</h1>
+            <p class="text-muted">Start forging high-performance .NET architectures.</p>
+        </div>
+
+        <form asp-action="Register" method="post" onsubmit="showLoading('Initializing Workspace...')">
+            <div asp-validation-summary="ModelOnly" class="text-danger small mb-4 text-center"></div>
+            
+            <div class="form-group mb-4">
+                <label asp-for="Email" class="form-label small fw-bold text-uppercase ls-1">Email Address</label>
+                <div class="input-group auth-input-group">
+                    <span class="input-group-text"><i class="bi bi-envelope-at"></i></span>
+                    <input asp-for="Email" class="form-control shadow-none" placeholder="architect@example.com" />
+                </div>
+                <span asp-validation-for="Email" class="text-danger small mt-1 d-block"></span>
+            </div>
+
+            <div class="row g-3 mb-5">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Password" class="form-label small fw-bold text-uppercase ls-1">Password</label>
+                        <div class="input-group auth-input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input asp-for="Password" class="form-control shadow-none" type="password" placeholder="••••••••" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="ConfirmPassword" class="form-label small fw-bold text-uppercase ls-1">Confirm</label>
+                        <div class="input-group auth-input-group">
+                            <span class="input-group-text"><i class="bi bi-patch-check"></i></span>
+                            <input asp-for="ConfirmPassword" class="form-control shadow-none" type="password" placeholder="••••••••" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mt-2">
+                    <span asp-validation-for="Password" class="text-danger small d-block"></span>
+                    <span asp-validation-for="ConfirmPassword" class="text-danger small d-block"></span>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-modern w-100 py-3 mb-4 fs-6 shadow">
+                <span>CREATE ACCOUNT</span>
+                <i class="bi bi-person-plus-fill ms-2"></i>
+            </button>
+
+            <div class="text-center mt-3">
+                <p class="text-muted small">
+                    Already have an account? 
+                    <a asp-action="Login" class="text-primary fw-bold text-decoration-none border-bottom border-primary">Sign in instead</a>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .ls-1 { letter-spacing: 1px; }
+</style>

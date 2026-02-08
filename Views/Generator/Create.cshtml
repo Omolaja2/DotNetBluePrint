@@ -50,49 +50,70 @@
                 <div class="arch-grid">
                     <!-- Layered -->
                     <div class="arch-card" onclick="selectArch('Layered', this)">
-                        <div class="arch-icon"><i class="bi bi-layers"></i></div>
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="arch-icon"><i class="bi bi-layers"></i></div>
+                            <div class="select-indicator"><i class="bi bi-check-circle-fill"></i></div>
+                        </div>
                         <h4>Layered</h4>
                         <p>Classic N-Tier separation (Core, Business, Data, Web).</p>
                     </div>
 
                     <!-- MVC -->
                     <div class="arch-card" onclick="selectArch('MVC', this)">
-                        <div class="arch-icon"><i class="bi bi-window-sidebar"></i></div>
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="arch-icon"><i class="bi bi-window-sidebar"></i></div>
+                            <div class="select-indicator"><i class="bi bi-check-circle-fill"></i></div>
+                        </div>
                         <h4>MVC</h4>
                         <p>The industry standard Model-View-Controller pattern.</p>
                     </div>
 
                     <!-- Clean Architecture -->
                     <div class="arch-card selected" onclick="selectArch('CleanArchitecture', this)">
-                        <div class="arch-icon"><i class="bi bi-shield-check"></i></div>
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="arch-icon"><i class="bi bi-shield-check"></i></div>
+                            <div class="select-indicator"><i class="bi bi-check-circle-fill"></i></div>
+                        </div>
                         <h4>Clean Architecture</h4>
                         <p>Domain-centric design for high maintainability.</p>
                     </div>
 
                     <!-- MVVM -->
                     <div class="arch-card" onclick="selectArch('MVVM', this)">
-                        <div class="arch-icon"><i class="bi bi-aspect-ratio"></i></div>
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="arch-icon"><i class="bi bi-aspect-ratio"></i></div>
+                            <div class="select-indicator"><i class="bi bi-check-circle-fill"></i></div>
+                        </div>
                         <h4>MVVM</h4>
                         <p>Clean separation between UI and business logic.</p>
                     </div>
 
                     <!-- Microservices -->
                     <div class="arch-card" onclick="selectArch('Microservices', this)">
-                        <div class="arch-icon"><i class="bi bi-boxes"></i></div>
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="arch-icon"><i class="bi bi-boxes"></i></div>
+                            <div class="select-indicator"><i class="bi bi-check-circle-fill"></i></div>
+                        </div>
                         <h4>Microservices</h4>
                         <p>Scalable, distributed system with independent services.</p>
                     </div>
 
                     <!-- Hexagonal -->
                     <div class="arch-card" onclick="selectArch('Hexagonal', this)">
-                        <div class="arch-icon"><i class="bi bi-hexagon"></i></div>
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="arch-icon"><i class="bi bi-hexagon"></i></div>
+                            <div class="select-indicator"><i class="bi bi-check-circle-fill"></i></div>
+                        </div>
                         <h4>Hexagonal</h4>
                         <p>Ports and Adapters for decoupling core logic from infra.</p>
                     </div>
 
                     <!-- CQRS -->
                     <div class="arch-card" onclick="selectArch('CQRS', this)">
-                        <div class="arch-icon"><i class="bi bi-arrow-left-right"></i></div>
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="arch-icon"><i class="bi bi-arrow-left-right"></i></div>
+                            <div class="select-indicator"><i class="bi bi-check-circle-fill"></i></div>
+                        </div>
                         <h4>CQRS</h4>
                         <p>Command Query Responsibility Segregation for complex apps.</p>
                     </div>
@@ -101,38 +122,44 @@
             </div>
 
             <div class="mb-5">
-                <label class="form-label mb-3">Select Persistence Layer</label>
+                <label class="form-label d-block mb-3 fs-5 fw-800">
+                    <i class="bi bi-database-fill me-2 text-primary"></i>Database Provider
+                </label>
                 <div class="db-grid">
                     <!-- SQL Server -->
                     <div class="db-card selected" onclick="selectDb('SqlServer', this)">
                         <div class="db-icon"><i class="bi bi-database-fill"></i></div>
                         <h5>SQL Server</h5>
+                        <div class="ms-auto select-indicator sm"><i class="bi bi-check-circle-fill text-primary"></i></div>
                     </div>
 
                     <!-- PostgreSQL -->
                     <div class="db-card" onclick="selectDb('PostgreSQL', this)">
                         <div class="db-icon"><i class="bi bi-database"></i></div>
                         <h5>PostgreSQL</h5>
+                        <div class="ms-auto select-indicator sm"><i class="bi bi-check-circle-fill text-primary"></i></div>
                     </div>
 
                     <!-- MySQL -->
                     <div class="db-card" onclick="selectDb('MySQL', this)">
                         <div class="db-icon"><i class="bi bi-database-add"></i></div>
                         <h5>MySQL</h5>
+                        <div class="ms-auto select-indicator sm"><i class="bi bi-check-circle-fill text-primary"></i></div>
                     </div>
 
                     <!-- SQLite -->
                     <div class="db-card" onclick="selectDb('SQLite', this)">
                         <div class="db-icon"><i class="bi bi-database-check"></i></div>
                         <h5>SQLite</h5>
+                        <div class="ms-auto select-indicator sm"><i class="bi bi-check-circle-fill text-primary"></i></div>
                     </div>
                 </div>
                 <input type="hidden" asp-for="Database" id="selectedDb" value="SqlServer" />
             </div>
 
-            <button type="submit" class="generate-btn">
-                <span>Generate Project Skeleton</span>
-                <i class="bi bi-download"></i>
+            <button type="submit" class="btn-modern w-100 py-3 mt-2" style="font-size: 1.1rem; letter-spacing: 1px;">
+                <span>FORGE ARCHITECTURE</span>
+                <i class="bi bi-hammer ms-2"></i>
             </button>
         </form>
     </div>
@@ -163,10 +190,24 @@
         document.getElementById('genForm').addEventListener('submit', function() {
             document.getElementById('loadingOverlay').style.display = 'flex';
             
-            // Auto-hide after 8 seconds because file downloads don't trigger page load
+            // Clear existing cookie
+            document.cookie = "fileDownload=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+            
+            // Check for cookie return every 500ms
+            const checkCookie = setInterval(() => {
+                if (document.cookie.split(';').some((item) => item.trim().startsWith('fileDownload='))) {
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                    clearInterval(checkCookie);
+                    // Clean up cookie
+                    document.cookie = "fileDownload=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+                }
+            }, 500);
+
+            // Safety timeout (30 seconds)
             setTimeout(() => {
                 document.getElementById('loadingOverlay').style.display = 'none';
-            }, 8000);
+                clearInterval(checkCookie);
+            }, 30000);
         });
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -177,6 +218,7 @@
                  cards.forEach(c => {
                      if(c.getAttribute('onclick').includes("'" + currentArch + "'")) {
                          c.classList.add('selected');
+                         c.click();
                      }
                  });
              }
@@ -188,10 +230,10 @@
                  dbCards.forEach(c => {
                      if(c.getAttribute('onclick').includes("'" + currentDb + "'")) {
                          c.classList.add('selected');
+                         c.click();
                      }
                  });
              }
         });
     </script>
 }
-

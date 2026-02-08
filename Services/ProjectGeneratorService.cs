@@ -84,7 +84,7 @@ namespace DotNetBlueprint.Services
 
             Directory.CreateDirectory(Path.Combine(projectRoot, "Core", "Entities"));
             File.WriteAllText(Path.Combine(projectRoot, "Core", "Entities", "SampleEntity.cs"),
-$@"namespace {projectName}.Core.Entities;
+$@"namespace Core.Entities;
 public class SampleEntity
 {{
     public int Id {{ get; set; }}
@@ -92,12 +92,12 @@ public class SampleEntity
 }}");
 
             // HomeController
-            var webControllers = Path.Combine(projectRoot, "Web", "Controllers");
-            Directory.CreateDirectory(webControllers);
-            File.WriteAllText(Path.Combine(webControllers, "HomeController.cs"),
+            var controllersPath = Path.Combine(projectRoot, "Web", "Controllers");
+            Directory.CreateDirectory(controllersPath);
+            File.WriteAllText(Path.Combine(controllersPath, "HomeController.cs"),
 $@"using Microsoft.AspNetCore.Mvc;
 
-namespace {projectName}.Controllers;
+namespace Web.Controllers;
 public class HomeController : Controller
 {{
     public IActionResult Index() => View();
@@ -124,7 +124,7 @@ public class HomeController : Controller
             var domainFolder = Path.Combine(projectRoot, "Domain", "Entities");
             Directory.CreateDirectory(domainFolder);
             File.WriteAllText(Path.Combine(domainFolder, "ProjectBlueprint.cs"),
-$@"namespace {projectName}.Entities;
+$@"namespace Domain.Entities;
 public class ProjectBlueprint
 {{
     public int Id {{ get; set; }}
@@ -140,11 +140,11 @@ public class ProjectBlueprint
             var appFolder = Path.Combine(projectRoot, "Application", "Interfaces");
             Directory.CreateDirectory(appFolder);
             File.WriteAllText(Path.Combine(appFolder, "IProjectRepository.cs"),
-$@"using {projectName}.Entities;
+$@"using Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace {projectName}.Interfaces;
+namespace Application.Interfaces;
 public interface IProjectRepository
 {{
     Task<List<ProjectBlueprint>> GetAllAsync();
@@ -159,12 +159,12 @@ public interface IProjectRepository
             var infraFolder = Path.Combine(projectRoot, "Infrastructure", "Repositories");
             Directory.CreateDirectory(infraFolder);
             File.WriteAllText(Path.Combine(infraFolder, "ProjectRepository.cs"),
-$@"using {projectName}.Interfaces;
-using {projectName}.Entities;
+$@"using Application.Interfaces;
+using Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace {projectName}.Repositories;
+namespace Infrastructure.Repositories;
 public class ProjectRepository : IProjectRepository
 {{
     private readonly List<ProjectBlueprint> _store = new();
@@ -177,14 +177,14 @@ public class ProjectRepository : IProjectRepository
 }}");
 
             // Web controller
-            var webControllers = Path.Combine(projectRoot, "Web", "Controllers");
-            Directory.CreateDirectory(webControllers);
-            File.WriteAllText(Path.Combine(webControllers, "ProjectController.cs"),
-$@"using {projectName}.Interfaces;
+            var controllersPath = Path.Combine(projectRoot, "Web", "Controllers");
+            Directory.CreateDirectory(controllersPath);
+            File.WriteAllText(Path.Combine(controllersPath, "ProjectController.cs"),
+$@"using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace {projectName}.Controllers;
+namespace Web.Controllers;
 public class ProjectController : Controller
 {{
     private readonly IProjectRepository _repo;
@@ -197,10 +197,10 @@ public class ProjectController : Controller
     }}
 }}");
 
-            File.WriteAllText(Path.Combine(webControllers, "HomeController.cs"),
+            File.WriteAllText(Path.Combine(controllersPath, "HomeController.cs"),
 $@"using Microsoft.AspNetCore.Mvc;
 
-namespace {projectName}.Controllers;
+namespace Web.Controllers;
 public class HomeController : Controller
 {{
     public IActionResult Index() => View();
@@ -216,7 +216,7 @@ public class HomeController : Controller
 
             Directory.CreateDirectory(Path.Combine(projectRoot, "ViewModels", "Home"));
             File.WriteAllText(Path.Combine(projectRoot, "ViewModels", "Home", "IndexViewModel.cs"),
-$@"namespace {projectName}.ViewModels.Home;
+$@"namespace ViewModels.Home;
 public class IndexViewModel
 {{
     public string Title {{ get; set; }} = ""Welcome to MVVM"";
@@ -282,21 +282,20 @@ public class IndexViewModel
             RunCmd($"dotnet add Infrastructure package {GetDbPackage(database)} --version {efVersion} --no-restore", projectRoot);
 
             // CQRS Structure in Application
-            var appPath = Path.Combine(projectRoot, "Application");
-            Directory.CreateDirectory(Path.Combine(appPath, "Commands"));
-            Directory.CreateDirectory(Path.Combine(appPath, "Queries"));
-            Directory.CreateDirectory(Path.Combine(appPath, "Handlers"));
-            Directory.CreateDirectory(Path.Combine(appPath, "DTOs"));
+            Directory.CreateDirectory(Path.Combine(projectRoot, "Application", "Commands"));
+            Directory.CreateDirectory(Path.Combine(projectRoot, "Application", "Queries"));
+            Directory.CreateDirectory(Path.Combine(projectRoot, "Application", "Handlers"));
+            Directory.CreateDirectory(Path.Combine(projectRoot, "Application", "DTOs"));
         }
 
         private void GenerateMVC(string projectRoot, string projectName, string framework)
         {
-            RunCmd($"dotnet new mvc -n Web --framework {framework} --no-restore", projectRoot);
-            RunCmd("dotnet sln add Web", projectRoot);
+            RunCmd($"dotnet new mvc -n {projectName} --framework {framework} --no-restore", projectRoot);
+            RunCmd($"dotnet sln add {projectName}", projectRoot);
 
-            var webControllers = Path.Combine(projectRoot, "Web", "Controllers");
-            Directory.CreateDirectory(webControllers);
-            File.WriteAllText(Path.Combine(webControllers, "HomeController.cs"),
+            var controllersPath = Path.Combine(projectRoot, projectName, "Controllers");
+            Directory.CreateDirectory(controllersPath);
+            File.WriteAllText(Path.Combine(controllersPath, "HomeController.cs"),
 $@"using Microsoft.AspNetCore.Mvc;
 
 namespace {projectName}.Controllers;
@@ -316,16 +315,21 @@ public class HomeController : Controller
 
         private void RunCmd(string command, string workingDir)
         {
+            var isWindows = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows);
+            var shell = isWindows ? "cmd.exe" : "/bin/sh";
+            var args = isWindows ? $"/c {command}" : $"-c \"{command}\"";
+
             var process = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
-                    FileName = "cmd.exe",
-                    Arguments = $"/c {command}",
+                    FileName = shell,
+                    Arguments = args,
                     WorkingDirectory = workingDir,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
-                    CreateNoWindow = true
+                    CreateNoWindow = true,
+                    UseShellExecute = false
                 }
             };
 

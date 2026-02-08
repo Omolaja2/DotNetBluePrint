@@ -8,6 +8,8 @@ namespace DotNetBlueprint.Models
         public string ProjectName { get; set; } ="";
         public string Architecture { get; set; } = "";
          public string DotNetVersion { get; set; } = "";
+         public string Database { get; set; } = "";
+         public int UserId { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }
