@@ -7,13 +7,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
+// Retreive connection string from both appsettings and Environment Variables (for Render)
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 if (!string.IsNullOrEmpty(connectionString))
 {
     builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 35)))
+        options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 35)),
+            mysqlOptions => mysqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,
+                maxRetryDelay: TimeSpan.FromSeconds(30),
+                errorNumbersToAdd: null))
     );
 }
+
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
