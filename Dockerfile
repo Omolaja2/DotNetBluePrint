@@ -10,13 +10,14 @@ RUN dotnet restore
 COPY . .
 RUN dotnet publish "DotNetBlueprint.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-# Runtime Stage (Using SDK because we need 'dotnet' CLI at runtime)
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS final
+# Runtime Stage (Standard ASP.NET Runtime)
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
 COPY --from=build /app/publish .
 
-# Expose port (Render uses 10000 by default or environment variable PORT)
+# Use Render's default port or override via environment variable
 ENV ASPNETCORE_URLS=http://+:10000
 EXPOSE 10000
 
 ENTRYPOINT ["dotnet", "DotNetBlueprint.dll"]
+
