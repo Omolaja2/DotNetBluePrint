@@ -63,9 +63,12 @@ namespace DotNetBlueprint.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"[GENERATOR ERROR]: {ex.Message}");
+                Console.WriteLine($"[STACK TRACE]: {ex.StackTrace}");
                 ModelState.AddModelError("", $"Project generation failed: {ex.Message}");
                 return View("Create", request);
             }
+
 
             try
             {

@@ -10,8 +10,8 @@ RUN dotnet restore
 COPY . .
 RUN dotnet publish "DotNetBlueprint.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-# Runtime Stage (Standard ASP.NET Runtime)
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
+# Runtime Stage (Must use SDK because the app runs 'dotnet' CLI commands at runtime)
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS final
 WORKDIR /app
 COPY --from=build /app/publish .
 
