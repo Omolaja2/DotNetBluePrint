@@ -7,19 +7,25 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
+// Retreive connection string from both appsettings and Environment Variables
+// We check multiple locations for maximum compatibility with Render/Production
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+                      ?? builder.Configuration["ConnectionStrings:DefaultConnection"]
+                      ?? builder.Configuration["DefaultConnection"];
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-if (!string.IsNullOrEmpty(connectionString))
+if (string.IsNullOrEmpty(connectionString))
 {
-    builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 35)),
-            mysqlOptions => mysqlOptions.EnableRetryOnFailure(
-                maxRetryCount: 5,
-                maxRetryDelay: TimeSpan.FromSeconds(30),
-                errorNumbersToAdd: null))
-    );
+    Console.WriteLine("WARNING: Connection string 'DefaultConnection' not found in configuration!");
 }
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseMySql(connectionString ?? "Server=placeholder;Database=placeholder", 
+        new MySqlServerVersion(new Version(8, 0, 35)),
+        mysqlOptions => mysqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(30),
+            errorNumbersToAdd: null))
+);
 
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -38,23 +44,36 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();
 
-// Automatically ensure DB is created on startup (Safety Wrapped)
+// Automatically ensure DB is created on startup (Speed Optimized)
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var logger = services.GetRequiredService<ILogger<Program>>();
+    var db = services.GetRequiredService<AppDbContext>();
+
     try
     {
-        var db = services.GetRequiredService<AppDbContext>();
-        logger.LogInformation("Attempting to connect to the database and ensure it exists...");
-        db.Database.EnsureCreated();
-        logger.LogInformation("Database connection successful.");
+        logger.LogInformation("Starting database connectivity check...");
+        
+        // Use a short timeout so we don't hang the app and cause a 'Bad Gateway'
+        db.Database.SetCommandTimeout(10); 
+        
+        if (db.Database.CanConnect())
+        {
+            db.Database.EnsureCreated();
+            logger.LogInformation("✅ Database forged and ready!");
+        }
+        else
+        {
+            logger.LogWarning("⚠️ Database is not reachable yet. The app will start, but database features will be offline.");
+        }
     }
     catch (Exception ex)
     {
-        logger.LogError(ex, "An error occurred during database initialization. The app will attempt to continue, but DB features may fail.");
+        logger.LogError("❌ Database initialization skipped: {Message}", ex.Message);
     }
 }
+
 
 
 if (!app.Environment.IsDevelopment())
