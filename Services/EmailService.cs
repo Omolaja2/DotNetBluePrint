@@ -19,11 +19,9 @@ namespace DotNetBlueprint.Services
 
         public async Task SendWelcomeEmailAsync(string email)
         {
-            // In a real application, you would use SmtpClient or a service like SendGrid here.
-            // For now, we will generate the beautiful HTML template and log it.
+
             
             var htmlTemplate = $@"
-<!DOCTYPE html>
 <html>
 <head>
     <meta charset='utf-8'>
