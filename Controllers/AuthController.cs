@@ -46,7 +46,6 @@ namespace DotNetBlueprint.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            // Send beautiful welcoming email
             await _emailService.SendWelcomeEmailAsync(user.Email);
 
             return RedirectToAction("Login");

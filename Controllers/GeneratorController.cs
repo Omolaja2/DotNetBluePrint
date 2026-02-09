@@ -67,7 +67,6 @@ namespace DotNetBlueprint.Controllers
                 return View("Create", request);
             }
 
-            // Save history to DB
             try
             {
                 var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
@@ -87,7 +86,6 @@ namespace DotNetBlueprint.Controllers
             }
             catch { /* Log error here if needed */ }
 
-            // Signal download completed via cookie
             Response.Cookies.Append("fileDownload", "true", new Microsoft.AspNetCore.Http.CookieOptions { HttpOnly = false });
 
             return File(
