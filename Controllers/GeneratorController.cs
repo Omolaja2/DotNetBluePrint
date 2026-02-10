@@ -63,11 +63,15 @@ namespace DotNetBlueprint.Controllers
             }
             catch (Exception ex)
             {
+                // Log all technical details internally for the administrator
                 Console.WriteLine($"[GENERATOR ERROR]: {ex.Message}");
                 Console.WriteLine($"[STACK TRACE]: {ex.StackTrace}");
-                ModelState.AddModelError("", $"Project generation failed: {ex.Message}");
+                
+                // Show a clean, professional message to the user
+                ModelState.AddModelError("", "The forge encountered a temporary issue assembling your architecture. Please try a different version or contact support if the problem persists.");
                 return View("Create", request);
             }
+
 
 
             try
