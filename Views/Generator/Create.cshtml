@@ -19,9 +19,21 @@
         <h1 class="title-gradient text-center">Architectural Blueprint</h1>
         <p class="text-center text-muted mb-5">Select a refined architecture to jumpstart your next .NET project.</p>
 
-        <div asp-validation-summary="ModelOnly" class="text-danger mb-4 text-center fw-bold"></div>
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="premium-alert fade-in mb-4">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="alert-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
+                    <div class="alert-content">
+                        <h6 class="mb-1 fw-bold">Forge Advisory</h6>
+                        <div asp-validation-summary="ModelOnly" class="small opacity-75"></div>
+                    </div>
+                </div>
+            </div>
+        }
 
         <form asp-action="Generate" method="post" id="genForm">
+
 
             <div class="row g-4 mb-5">
                 <div class="col-md-7">
@@ -38,14 +50,14 @@
                     <div class="form-group">
                         <label class="form-label">Runtime Version</label>
                         <select asp-for="NetVersion" class="form-select">
-                            <option value="6.0">.NET 6.0 (STS)</option>
-                            <option value="7.0">.NET 7.0 (STS)</option>
+                            <option value="6.0">.NET 6.0 (LTS Support)</option>
                             <option value="8.0" selected>.NET 8.0 (LTS)</option>
                             <option value="9.0">.NET 9.0 (Current)</option>
                             <option value="10.0">.NET 10.0 (Preview)</option>
                         </select>
                     </div>
                 </div>
+
             </div>
 
             <div class="mb-4">
@@ -170,15 +182,60 @@
 
 @section Scripts {
     <div id="loadingOverlay" class="loading-overlay">
-        <div class="loading-content">
-            <div class="loading-spinner"></div>
-            <p class="loading-text">Forging Your Architecture...</p>
-            <p class="text-muted small">Please wait while we assemble your blueprint.</p>
+        <div class="loading-content" id="loadingContent">
+            <div id="loadingSpinner" class="loading-spinner"></div>
+            <div id="successIcon" class="success-icon" style="display: none;">
+                <i class="bi bi-check-circle-fill"></i>
+            </div>
+            <p id="loadingStatus" class="loading-text">Forging Your Architecture...</p>
+            <p id="loadingSubtext" class="text-muted small">Please wait while we assemble your blueprint.</p>
         </div>
     </div>
 
+    <!-- Forge Error Modal -->
+    <div id="errorModal" class="loading-overlay" style="display: none;">
+        <div class="premium-card text-center" style="max-width: 450px; padding: 3rem;">
+            <div class="text-danger mb-4" style="font-size: 4rem;">
+                <i class="bi bi-exclamation-octagon-fill"></i>
+            </div>
+            <h3 class="fw-black mb-3 text-primary">Forge Interrupted</h3>
+            <p class="text-muted mb-4 small">@Html.ValidationSummary(true)</p>
+            <button type="button" class="btn-modern-outline w-100" onclick="document.getElementById('errorModal').style.display='none'">
+                ACKNOWLEDGE
+            </button>
+        </div>
+    </div>
+
+    <style>
+        .success-icon {
+            font-size: 4rem;
+            color: #28a745;
+            margin-bottom: 1.5rem;
+            animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @@keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); opacity: 1; }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
+        
+        .loading-overlay.success-bg {
+            background: rgba(255, 255, 255, 0.98);
+        }
+    </style>
+
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // If there's a validation error, show the error modal automatically
+            if ('@ViewData.ModelState.IsValid' === 'False') {
+                document.getElementById('errorModal').style.display = 'flex';
+            }
+        });
+
         function selectArch(val, el) {
+
             document.querySelectorAll('.arch-card').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
             document.getElementById('selectedArch').value = val;
@@ -191,27 +248,67 @@
         }
 
         document.getElementById('genForm').addEventListener('submit', function() {
-            document.getElementById('loadingOverlay').style.display = 'flex';
-            
+            // Reset overlay state
+            const overlay = document.getElementById('loadingOverlay');
+            const spinner = document.getElementById('loadingSpinner');
+            const success = document.getElementById('successIcon');
+            const status = document.getElementById('loadingStatus');
+            const subtext = document.getElementById('loadingSubtext');
+
+            overlay.style.display = 'flex';
+            overlay.classList.remove('success-bg');
+            spinner.style.display = 'block';
+            success.style.display = 'none';
+            status.innerText = "Forging Your Architecture...";
+            subtext.innerText = "Please wait while we assemble your blueprint.";
+
             // Clear existing cookie
             document.cookie = "fileDownload=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
             
             // Check for cookie return every 500ms
             const checkCookie = setInterval(() => {
                 if (document.cookie.split(';').some((item) => item.trim().startsWith('fileDownload='))) {
-                    document.getElementById('loadingOverlay').style.display = 'none';
                     clearInterval(checkCookie);
+                    
+                    // Show "Generated" State
+                    overlay.classList.add('success-bg');
+                    spinner.style.display = 'none';
+                    success.style.display = 'block';
+                    status.innerText = "Generated!";
+                    status.style.color = "#28a745";
+                    subtext.innerText = "Your blueprint has been forged and downloaded.";
+
                     // Clean up cookie
                     document.cookie = "fileDownload=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+
+                    // Hide after 2 seconds
+                    setTimeout(() => {
+                        fadeOut(overlay);
+                    }, 2000);
                 }
             }, 500);
 
-            // Safety timeout (30 seconds)
+            // Safety timeout (45 seconds)
             setTimeout(() => {
-                document.getElementById('loadingOverlay').style.display = 'none';
-                clearInterval(checkCookie);
-            }, 30000);
+                if (overlay.style.display === 'flex' && spinner.style.display !== 'none') {
+                    overlay.style.display = 'none';
+                    clearInterval(checkCookie);
+                }
+            }, 45000);
         });
+
+        function fadeOut(el) {
+            el.style.opacity = 1;
+            (function fade() {
+                if ((el.style.opacity -= .1) < 0) {
+                    el.style.display = "none";
+                    el.style.opacity = 1;
+                } else {
+                    requestAnimationFrame(fade);
+                }
+            })();
+        }
+
 
         document.addEventListener('DOMContentLoaded', () => {
              // Architecture init
