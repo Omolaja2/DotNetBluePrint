@@ -16,25 +16,57 @@ builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddControllersWithViews();
 
-// Retreive connection string from both appsettings and Environment Variables
-// We check multiple locations for maximum compatibility with Render/Production
+// Retreive connection string from all possible sources
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
                       ?? builder.Configuration["ConnectionStrings:DefaultConnection"]
-                      ?? builder.Configuration["DefaultConnection"];
+                      ?? builder.Configuration["DefaultConnection"]
+                      ?? Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection")
+                      ?? Environment.GetEnvironmentVariable("DefaultConnection");
 
+Console.WriteLine($"[STARTUP] Searching for Connection String...");
 if (string.IsNullOrEmpty(connectionString))
 {
-    Console.WriteLine("WARNING: Connection string 'DefaultConnection' not found in configuration!");
+    Console.WriteLine("[STARTUP] ❌ WARNING: No Connection String found! (DefaultConnection)");
+}
+else 
+{
+    Console.WriteLine($"[STARTUP] ✅ Connection String detected (Length: {connectionString.Length})");
 }
 
+
+// Helper to translate Aiven/Render MySQL URIs into standard .NET connection strings
+string FinalizeConnectionString(string input)
+{
+    if (string.IsNullOrEmpty(input)) return input;
+    if (input.StartsWith("mysql://"))
+    {
+        try 
+        {
+            var uri = new Uri(input);
+            var userInfo = uri.UserInfo.Split(':');
+            var user = userInfo[0];
+            var password = userInfo.Length > 1 ? userInfo[1] : "";
+            var host = uri.Host;
+            var port = uri.Port;
+            var database = uri.AbsolutePath.TrimStart('/');
+            return $"Server={host};Port={port};Database={database};User Id={user};Password={password};SSL Mode=Required;TrustServerCertificate=true;";
+        }
+        catch { return input; }
+    }
+    return input;
+}
+
+var dbConnectionString = FinalizeConnectionString(connectionString);
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(connectionString ?? "Server=placeholder;Database=placeholder", 
+    options.UseMySql(dbConnectionString ?? "Server=placeholder;Database=placeholder", 
         new MySqlServerVersion(new Version(8, 0, 35)),
         mysqlOptions => mysqlOptions.EnableRetryOnFailure(
             maxRetryCount: 5,
             maxRetryDelay: TimeSpan.FromSeconds(30),
             errorNumbersToAdd: null))
 );
+
 
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
