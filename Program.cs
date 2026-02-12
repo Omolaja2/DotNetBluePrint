@@ -48,9 +48,10 @@ string FinalizeConnectionString(string input)
             var host = uri.Host;
             var port = uri.Port;
             var database = uri.AbsolutePath.TrimStart('/');
-            return $"Server={host};Port={port};Database={database};User Id={user};Password={password};SSL Mode=Required;TrustServerCertificate=true;";
+            return $"Server={host};Port={port};Database={database};User Id={user};Password={password};SSL Mode=Required;TrustServerCertificate=true;Connection Timeout=60;";
         }
         catch { return input; }
+
     }
     return input;
 }
@@ -114,9 +115,15 @@ using (var scope = app.Services.CreateScope())
 
 
 
-// --- DEBUG MODE: FORCING DETAILED ERRORS ON RENDER ---
-app.UseDeveloperExceptionPage(); 
-// ----------------------------------------------------
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
@@ -130,6 +137,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 
 
 app.MapControllerRoute(
