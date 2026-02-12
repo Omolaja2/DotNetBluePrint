@@ -30,11 +30,10 @@ if (string.IsNullOrEmpty(connectionString))
 }
 else 
 {
-    Console.WriteLine($"[STARTUP] ✅ Connection String detected (Length: {connectionString.Length})");
+    Console.WriteLine($"[STARTUP]  Connection String detected (Length: {connectionString.Length})");
 }
 
 
-// Helper to translate Aiven/Render MySQL URIs into standard .NET connection strings
 string FinalizeConnectionString(string input)
 {
     if (string.IsNullOrEmpty(input)) return input;
@@ -56,7 +55,7 @@ string FinalizeConnectionString(string input)
     return input;
 }
 
-var dbConnectionString = FinalizeConnectionString(connectionString);
+var dbConnectionString = FinalizeConnectionString(connectionString!);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(dbConnectionString ?? "Server=placeholder;Database=placeholder", 
@@ -85,7 +84,6 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();
 
-// Automatically ensure DB is created on startup (Speed Optimized)
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -96,13 +94,12 @@ using (var scope = app.Services.CreateScope())
     {
         logger.LogInformation("Starting database connectivity check...");
         
-        // Use a short timeout so we don't hang the app and cause a 'Bad Gateway'
         db.Database.SetCommandTimeout(10); 
         
         if (db.Database.CanConnect())
         {
             db.Database.EnsureCreated();
-            logger.LogInformation("✅ Database forged and ready!");
+            logger.LogInformation(" Database forged and ready!");
         }
         else
         {
@@ -117,11 +114,14 @@ using (var scope = app.Services.CreateScope())
 
 
 
-if (!app.Environment.IsDevelopment())
+// --- DEBUG MODE: FORCING DETAILED ERRORS ON RENDER ---
+app.UseDeveloperExceptionPage(); 
+// ----------------------------------------------------
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
+    ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto
+});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -130,6 +130,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllerRoute(
     name: "default",

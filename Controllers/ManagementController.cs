@@ -21,7 +21,6 @@ namespace DotNetBlueprint.Controllers
         public async Task<IActionResult> Users()
         {
             // For now, any logged in user can see this, 
-            // but in a production app you'd restrict this to an Admin role.
             var users = await _context.Users
                 .OrderByDescending(u => u.CreatedAt)
                 .ToListAsync();

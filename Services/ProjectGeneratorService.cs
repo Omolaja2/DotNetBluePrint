@@ -31,7 +31,6 @@ namespace DotNetBlueprint.Services
             RunCmd("dotnet --version", projectRoot);
             RunCmd($"dotnet new sln -n {projectName}", projectRoot);
 
-            // Generate architecture
             switch (architecture)
             {
                 case "Layered":
@@ -176,7 +175,6 @@ public class ProjectRepository : IProjectRepository
     }}
 }}");
 
-            // Web controller
             var controllersPath = Path.Combine(projectRoot, "Web", "Controllers");
             Directory.CreateDirectory(controllersPath);
             File.WriteAllText(Path.Combine(controllersPath, "ProjectController.cs"),

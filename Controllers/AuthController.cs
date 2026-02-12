@@ -7,9 +7,7 @@ using DotNetBlueprint.Models;
 using DotNetBlueprint.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using DotNetBlueprint.Services;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace DotNetBlueprint.Controllers
 {
