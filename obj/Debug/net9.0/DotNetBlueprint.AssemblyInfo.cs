@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DotNetBlueprint")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5220b2a517bc1df6ec05edfcbd193998582d46f7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cac5521531f970d64bba0032e611d1db31ac6e72")]
 [assembly: System.Reflection.AssemblyProductAttribute("DotNetBlueprint")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DotNetBlueprint")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
