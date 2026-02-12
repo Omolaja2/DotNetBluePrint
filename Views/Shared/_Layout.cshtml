@@ -56,11 +56,10 @@
                                 <i class="bi bi-person-circle me-2 opacity-75"></i>
                                 <span class="small fw-600">@User.Identity.Name</span>
                             </div>
-                            <a asp-controller="Management" asp-action="Users" class="nav-link-modern">
-                                <i class="bi bi-shield-lock me-1"></i>Studio Manager
-                            </a>
                             <a asp-controller="Auth" asp-action="Logout" class="btn-modern-outline">Logout</a>
                         }
+
+
                         else
                         {
                             <a asp-controller="Auth" asp-action="Login" class="nav-link-modern">Sign In</a>
@@ -101,15 +100,11 @@
                     @if (User.Identity?.IsAuthenticated == true)
                     {
                         <li class="nav-item">
-                            <a class="nav-link text-main fw-600 p-0" asp-controller="Management" asp-action="Users">
-                                <i class="bi bi-shield-lock me-2 text-primary"></i>Studio Manager
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-main fw-600 p-0" asp-controller="Generator" asp-action="History">
                                 <i class="bi bi-collection me-2 text-primary"></i>My Blueprints
                             </a>
                         </li>
+
                         <li class="nav-item mt-4 pt-4 border-top">
                             <div class="small text-muted mb-2">Signed in as</div>
                             <div class="fw-bold text-main mb-3">@User.Identity.Name</div>
@@ -145,7 +140,7 @@
         </main>
     </div>
 
-    @if (ViewData["HideFooter"] == null || !(bool)ViewData["HideFooter"])
+    @if (ViewData["HideFooter"] is not true)
     {
         <footer class="footer border-top text-muted pt-4 pb-4 mt-5">
             <div class="container text-center">

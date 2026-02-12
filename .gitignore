@@ -1,0 +1,55 @@
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio files
+.vs/
+*.swp
+*.lut
+*.vshost.exe
+*.vshost.exe.config
+*.vshost.exe.manifest
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code files
+.vscode/
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+build/
+
+# Databases
+*.db
+*.sqlite
+*.sqlitedb
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userintercept
+*.usernf
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Dotnet Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ASP.NET Core
+appsettings.Development.json
+# Secrets
+secrets.json
+.env

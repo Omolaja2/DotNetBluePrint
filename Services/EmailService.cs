@@ -1,4 +1,7 @@
+using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace DotNetBlueprint.Services
@@ -11,16 +14,29 @@ namespace DotNetBlueprint.Services
     public class EmailService : IEmailService
     {
         private readonly ILogger<EmailService> _logger;
+        private readonly IConfiguration _config;
 
-        public EmailService(ILogger<EmailService> logger)
+        public EmailService(ILogger<EmailService> logger, IConfiguration config)
         {
             _logger = logger;
+            _config = config;
         }
 
         public async Task SendWelcomeEmailAsync(string email)
         {
+            var fromEmail = _config["EmailSettings:FromEmail"];
+            var password = _config["EmailSettings:Password"];
+            var smtpHost = _config["EmailSettings:SmtpHost"];
+            var smtpPortStr = _config["EmailSettings:SmtpPort"];
 
-            
+            if (string.IsNullOrEmpty(fromEmail) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(smtpHost) || string.IsNullOrEmpty(smtpPortStr))
+            {
+                _logger.LogError("Email configurations are missing. Cannot send real email.");
+                return;
+            }
+
+            int smtpPort = int.Parse(smtpPortStr);
+
             var htmlTemplate = $@"
 <html>
 <head>
@@ -51,7 +67,7 @@ namespace DotNetBlueprint.Services
             <span class='badge'>FORGE ACCESS GRANTED</span>
             <h1 class='title'>Welcome, Architect.</h1>
             <p class='message'>Your workshop is ready. You now have full access to the most sophisticated .NET scaffolding engine in the industry. Start forging project blueprints that follow the highest standards of architectural excellence.</p>
-            <a href='http://localhost:5078/Generator/Create' class='btn'>ENTER THE STUDIO</a>
+            <a href='https://dotnetblueprint.onrender.com/Generator/Create' class='btn'>ENTER THE STUDIO</a>
         </div>
         <div class='footer'>
             &copy; 2026 Blueprint Studio. All rights reserved.<br>
@@ -62,14 +78,31 @@ namespace DotNetBlueprint.Services
 </body>
 </html>";
 
-            _logger.LogInformation("==========================================");
-            _logger.LogInformation("SIMULATED EMAIL SENT TO: {Email}", email);
-            _logger.LogInformation("SUBJECT: Welcome to the Forge | Blueprint Studio");
-            _logger.LogInformation("HTML CONTENT PREVIEW:");
-            _logger.LogInformation(htmlTemplate);
-            _logger.LogInformation("==========================================");
+            try
+            {
+                using (var smtp = new SmtpClient(smtpHost, smtpPort))
+                {
+                    smtp.Credentials = new NetworkCredential(fromEmail, password);
+                    smtp.EnableSsl = true;
 
-            await Task.CompletedTask;
+                    var message = new MailMessage
+                    {
+                        From = new MailAddress(fromEmail!),
+                        Subject = "Welcome to the Forge | Blueprint Studio",
+                        Body = htmlTemplate,
+                        IsBodyHtml = true
+                    };
+
+                    message.To.Add(email);
+
+                    await smtp.SendMailAsync(message);
+                    _logger.LogInformation("✅ REAL EMAIL SENT TO: {Email}", email);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, "❌ FAILED TO SEND REAL EMAIL TO: {Email}", email);
+            }
         }
     }
 }

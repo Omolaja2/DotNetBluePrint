@@ -6,7 +6,11 @@ using DotNetBlueprint.Data;
 using DotNetBlueprint.Models;
 using DotNetBlueprint.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using DotNetBlueprint.Services;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 
 namespace DotNetBlueprint.Controllers
@@ -73,16 +77,18 @@ namespace DotNetBlueprint.Controllers
                 return View(model);
             }
 
-            var claims = new List<Claim>
+            var claims = new List<System.Security.Claims.Claim>
             {
-                new Claim(ClaimTypes.Name, user.Email),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                new System.Security.Claims.Claim(ClaimTypes.Name, user.Email),
+                new System.Security.Claims.Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
             return RedirectToAction("Create", "Generator");
+
+
         }
 
         public async Task<IActionResult> Logout()
