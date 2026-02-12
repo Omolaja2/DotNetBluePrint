@@ -94,7 +94,6 @@ using (var scope = app.Services.CreateScope())
     {
         logger.LogInformation("Starting database connectivity check...");
         
-        // Use a short timeout so we don't hang the app and cause a 'Bad Gateway'
         db.Database.SetCommandTimeout(10); 
         
         if (db.Database.CanConnect())
@@ -115,11 +114,14 @@ using (var scope = app.Services.CreateScope())
 
 
 
-if (!app.Environment.IsDevelopment())
+// --- DEBUG MODE: FORCING DETAILED ERRORS ON RENDER ---
+app.UseDeveloperExceptionPage(); 
+// ----------------------------------------------------
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
+    ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto
+});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -128,6 +130,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllerRoute(
     name: "default",
