@@ -30,11 +30,10 @@ if (string.IsNullOrEmpty(connectionString))
 }
 else 
 {
-    Console.WriteLine($"[STARTUP] ✅ Connection String detected (Length: {connectionString.Length})");
+    Console.WriteLine($"[STARTUP]  Connection String detected (Length: {connectionString.Length})");
 }
 
 
-// Helper to translate Aiven/Render MySQL URIs into standard .NET connection strings
 string FinalizeConnectionString(string input)
 {
     if (string.IsNullOrEmpty(input)) return input;
@@ -56,7 +55,7 @@ string FinalizeConnectionString(string input)
     return input;
 }
 
-var dbConnectionString = FinalizeConnectionString(connectionString);
+var dbConnectionString = FinalizeConnectionString(connectionString!);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(dbConnectionString ?? "Server=placeholder;Database=placeholder", 
@@ -85,7 +84,6 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();
 
-// Automatically ensure DB is created on startup (Speed Optimized)
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -102,7 +100,7 @@ using (var scope = app.Services.CreateScope())
         if (db.Database.CanConnect())
         {
             db.Database.EnsureCreated();
-            logger.LogInformation("✅ Database forged and ready!");
+            logger.LogInformation(" Database forged and ready!");
         }
         else
         {
