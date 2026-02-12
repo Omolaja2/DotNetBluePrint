@@ -57,13 +57,14 @@ namespace DotNetBlueprint.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            var user = _context.Users.FirstOrDefault(u => u.Email == model.Email);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
             
             if (user == null)
             {
                 ModelState.AddModelError("", "This email is not registered. Please create an account.");
                 return View(model);
             }
+
 
             var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, model.Password);
             if (result == PasswordVerificationResult.Failed)
