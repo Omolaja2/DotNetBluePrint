@@ -28,7 +28,6 @@ namespace DotNetBlueprint.Services
             Directory.CreateDirectory(projectRoot);
 
             var framework = $"net{netVersion}";
-            RunCmd("dotnet --version", projectRoot);
             RunCmd($"dotnet new sln -n {projectName}", projectRoot);
 
             switch (architecture)
@@ -54,6 +53,9 @@ namespace DotNetBlueprint.Services
                 case "CQRS":
                     GenerateCQRS(projectRoot, projectName, efVersion, database, framework);
                     break;
+                case "ProLayered":
+                    GenerateProLayered(projectRoot, projectName, efVersion, database, framework);
+                    break;
                 default:
                     throw new Exception("Unknown architecture type: " + architecture);
             }
@@ -68,16 +70,21 @@ namespace DotNetBlueprint.Services
 
         private void GenerateLayered(string projectRoot, string projectName, string efVersion, string database, string framework)
         {
-            RunCmd($"dotnet new classlib -n Core --framework {framework} --no-restore", projectRoot);
-            RunCmd($"dotnet new classlib -n Business --framework {framework} --no-restore", projectRoot);
-            RunCmd($"dotnet new classlib -n Data --framework {framework} --no-restore", projectRoot);
-            RunCmd($"dotnet new mvc -n Web --framework {framework} --no-restore", projectRoot);
+            Parallel.Invoke(
+                () => RunCmd($"dotnet new classlib -n Core --framework {framework} --no-restore", projectRoot),
+                () => RunCmd($"dotnet new classlib -n Business --framework {framework} --no-restore", projectRoot),
+                () => RunCmd($"dotnet new classlib -n Data --framework {framework} --no-restore", projectRoot),
+                () => RunCmd($"dotnet new mvc -n Web --framework {framework} --no-restore", projectRoot)
+            );
 
             RunCmd("dotnet sln add Core Business Data Web", projectRoot);
 
-            RunCmd("dotnet add Business reference Core", projectRoot);
-            RunCmd("dotnet add Data reference Business Core", projectRoot);
-            RunCmd("dotnet add Web reference Business Data", projectRoot);
+
+            RunCmd("dotnet add Business reference Core Data", projectRoot);
+            RunCmd("dotnet add Data reference Core", projectRoot);
+            RunCmd("dotnet add Web reference Business Core", projectRoot);
+
+            WriteAppSettings(Path.Combine(projectRoot, "Web"), database, projectName);
 
             RunCmd($"dotnet add Data package {GetDbPackage(database)} --version {efVersion} --no-restore", projectRoot);
 
@@ -105,15 +112,20 @@ public class HomeController : Controller
 
         private void GenerateCleanArchitecture(string projectRoot, string projectName, string efVersion, string database, string framework)
         {
-            RunCmd($"dotnet new classlib -n Domain --framework {framework} --no-restore", projectRoot);
-            RunCmd($"dotnet new classlib -n Application --framework {framework} --no-restore", projectRoot);
-            RunCmd($"dotnet new classlib -n Infrastructure --framework {framework} --no-restore", projectRoot);
-            RunCmd($"dotnet new mvc -n Web --framework {framework} --no-restore", projectRoot);
+            Parallel.Invoke(
+                () => RunCmd($"dotnet new classlib -n Domain --framework {framework} --no-restore", projectRoot),
+                () => RunCmd($"dotnet new classlib -n Application --framework {framework} --no-restore", projectRoot),
+                () => RunCmd($"dotnet new classlib -n Infrastructure --framework {framework} --no-restore", projectRoot),
+                () => RunCmd($"dotnet new mvc -n Web --framework {framework} --no-restore", projectRoot)
+            );
 
             RunCmd("dotnet sln add Domain Application Infrastructure Web", projectRoot);
+
             RunCmd("dotnet add Application reference Domain", projectRoot);
             RunCmd("dotnet add Infrastructure reference Application Domain", projectRoot);
             RunCmd("dotnet add Web reference Application Infrastructure", projectRoot);
+
+            WriteAppSettings(Path.Combine(projectRoot, "Web"), database, projectName);
 
             RunCmd($"dotnet add Infrastructure package {GetDbPackage(database)} --version {efVersion} --no-restore", projectRoot);
 
@@ -212,6 +224,8 @@ public class HomeController : Controller
             RunCmd("dotnet sln add ViewModels Web", projectRoot);
             RunCmd("dotnet add Web reference ViewModels", projectRoot);
 
+            WriteAppSettings(Path.Combine(projectRoot, "Web"), "SQLite", projectName);
+
             Directory.CreateDirectory(Path.Combine(projectRoot, "ViewModels", "Home"));
             File.WriteAllText(Path.Combine(projectRoot, "ViewModels", "Home", "IndexViewModel.cs"),
 $@"namespace ViewModels.Home;
@@ -225,18 +239,26 @@ public class IndexViewModel
         private void GenerateMicroservices(string projectRoot, string projectName, string efVersion, string database, string framework)
         {
             string[] services = { "Identity.Service", "Catalog.Service", "Ordering.Service", "Gateway.API" };
+            
+            Parallel.Invoke(
+                () => Parallel.ForEach(services, svc => {
+                    RunCmd($"dotnet new webapi -n {svc} --framework {framework} --no-restore", projectRoot);
+                }),
+                () => RunCmd($"dotnet new classlib -n Shared.Core --framework {framework} --no-restore", projectRoot)
+            );
+
             foreach (var svc in services)
             {
-                RunCmd($"dotnet new webapi -n {svc} --framework {framework} --no-restore", projectRoot);
                 RunCmd($"dotnet sln add {svc}", projectRoot);
                 if (svc != "Gateway.API")
                 {
                     RunCmd($"dotnet add {svc} package {GetDbPackage(database)} --version {efVersion} --no-restore", projectRoot);
                 }
+                WriteAppSettings(Path.Combine(projectRoot, svc), database, projectName);
             }
 
-            RunCmd($"dotnet new classlib -n Shared.Core --framework {framework} --no-restore", projectRoot);
             RunCmd("dotnet sln add Shared.Core", projectRoot);
+
             foreach (var svc in services)
             {
                 RunCmd($"dotnet add {svc} reference Shared.Core", projectRoot);
@@ -245,16 +267,21 @@ public class IndexViewModel
 
         private void GenerateHexagonal(string projectRoot, string projectName, string efVersion, string database, string framework)
         {
-            RunCmd($"dotnet new classlib -n Domain --framework {framework} --no-restore", projectRoot);
-            RunCmd($"dotnet new classlib -n Application --framework {framework} --no-restore", projectRoot);
-            RunCmd($"dotnet new classlib -n Infrastructure --framework {framework} --no-restore", projectRoot);
-            RunCmd($"dotnet new webapi -n API --framework {framework} --no-restore", projectRoot);
+            Parallel.Invoke(
+                () => RunCmd($"dotnet new classlib -n Domain --framework {framework} --no-restore", projectRoot),
+                () => RunCmd($"dotnet new classlib -n Application --framework {framework} --no-restore", projectRoot),
+                () => RunCmd($"dotnet new classlib -n Infrastructure --framework {framework} --no-restore", projectRoot),
+                () => RunCmd($"dotnet new webapi -n API --framework {framework} --no-restore", projectRoot)
+            );
 
             RunCmd("dotnet sln add Domain Application Infrastructure API", projectRoot);
+
 
             RunCmd("dotnet add Application reference Domain", projectRoot);
             RunCmd("dotnet add Infrastructure reference Application Domain", projectRoot);
             RunCmd("dotnet add API reference Application Infrastructure", projectRoot);
+
+            WriteAppSettings(Path.Combine(projectRoot, "API"), database, projectName);
 
             RunCmd($"dotnet add Infrastructure package {GetDbPackage(database)} --version {efVersion} --no-restore", projectRoot);
 
@@ -267,15 +294,20 @@ public class IndexViewModel
 
         private void GenerateCQRS(string projectRoot, string projectName, string efVersion, string database, string framework)
         {
-            RunCmd($"dotnet new classlib -n Domain --framework {framework} --no-restore", projectRoot);
-            RunCmd($"dotnet new classlib -n Application --framework {framework} --no-restore", projectRoot);
-            RunCmd($"dotnet new classlib -n Infrastructure --framework {framework} --no-restore", projectRoot);
-            RunCmd($"dotnet new webapi -n API --framework {framework} --no-restore", projectRoot);
+            Parallel.Invoke(
+                () => RunCmd($"dotnet new classlib -n Domain --framework {framework} --no-restore", projectRoot),
+                () => RunCmd($"dotnet new classlib -n Application --framework {framework} --no-restore", projectRoot),
+                () => RunCmd($"dotnet new classlib -n Infrastructure --framework {framework} --no-restore", projectRoot),
+                () => RunCmd($"dotnet new webapi -n API --framework {framework} --no-restore", projectRoot)
+            );
 
             RunCmd("dotnet sln add Domain Application Infrastructure API", projectRoot);
+
             RunCmd("dotnet add Application reference Domain", projectRoot);
             RunCmd("dotnet add Infrastructure reference Application", projectRoot);
             RunCmd("dotnet add API reference Application Infrastructure", projectRoot);
+
+            WriteAppSettings(Path.Combine(projectRoot, "API"), database, projectName);
 
             RunCmd($"dotnet add Infrastructure package {GetDbPackage(database)} --version {efVersion} --no-restore", projectRoot);
 
@@ -286,10 +318,52 @@ public class IndexViewModel
             Directory.CreateDirectory(Path.Combine(projectRoot, "Application", "DTOs"));
         }
 
+        private void GenerateProLayered(string projectRoot, string projectName, string efVersion, string database, string framework)
+        {
+            Parallel.Invoke(
+                () => RunCmd($"dotnet new classlib -n Application --framework {framework} --no-restore", projectRoot),
+                () => RunCmd($"dotnet new classlib -n Data --framework {framework} --no-restore", projectRoot),
+                () => RunCmd($"dotnet new classlib -n Gateway --framework {framework} --no-restore", projectRoot),
+                () => RunCmd($"dotnet new mvc -n Presentation --framework {framework} --no-restore", projectRoot)
+            );
+
+            RunCmd("dotnet sln add Presentation Application Data Gateway", projectRoot);
+
+            RunCmd("dotnet add Application reference Gateway Data", projectRoot);
+            RunCmd("dotnet add Presentation reference Application Data Gateway", projectRoot);
+
+            WriteAppSettings(Path.Combine(projectRoot, "Presentation"), database, projectName);
+
+            RunCmd($"dotnet add Data package {GetDbPackage(database)} --version {efVersion} --no-restore", projectRoot);
+
+            // Add Pro Boilerplate
+            var dataFolder = Path.Combine(projectRoot, "Data", "Repositories");
+            Directory.CreateDirectory(dataFolder);
+            File.WriteAllText(Path.Combine(dataFolder, "BaseRepository.cs"),
+$@"namespace Data.Repositories;
+public class BaseRepository<T> where T : class
+{{
+    // Professional Base Repo Pattern
+}}");
+
+            var appFolder = Path.Combine(projectRoot, "Application", "Services");
+            Directory.CreateDirectory(appFolder);
+            File.WriteAllText(Path.Combine(appFolder, "IProjectService.cs"),
+$@"namespace Application.Services;
+public interface IProjectService
+{{
+    void ProcessProject();
+}}");
+
+            RemovePlaceholderFiles(projectRoot);
+        }
+
         private void GenerateMVC(string projectRoot, string projectName, string framework)
         {
             RunCmd($"dotnet new mvc -n {projectName} --framework {framework} --no-restore", projectRoot);
             RunCmd($"dotnet sln add {projectName}", projectRoot);
+
+            WriteAppSettings(Path.Combine(projectRoot, projectName), "SQLite", projectName);
 
             var controllersPath = Path.Combine(projectRoot, projectName, "Controllers");
             Directory.CreateDirectory(controllersPath);
@@ -313,15 +387,15 @@ public class HomeController : Controller
 
         private void RunCmd(string command, string workingDir)
         {
-            var isWindows = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows);
-            var shell = isWindows ? "cmd.exe" : "/bin/sh";
-            var args = isWindows ? $"/c {command}" : $"-c \"{command}\"";
+            // Extract the actual command and arguments
+            string fileName = "dotnet";
+            string args = command.StartsWith("dotnet ") ? command.Substring(7) : command;
 
             var process = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
-                    FileName = shell,
+                    FileName = fileName,
                     Arguments = args,
                     WorkingDirectory = workingDir,
                     RedirectStandardOutput = true,
@@ -344,6 +418,37 @@ public class HomeController : Controller
                     $"❌ Command failed:\n{command}\n\nERROR:\n{error}\n\nOUTPUT:\n{output}"
                 );
             }
+        }
+
+
+        private string GetConnectionStringTemplate(string database, string projectName)
+        {
+            var dbName = projectName + "Db";
+            return database switch
+            {
+                "PostgreSQL" => $"Host=localhost;Port=5432;Database={dbName};Username=postgres;Password=YOUR_PASSWORD;",
+                "MySQL" => $"Server=localhost;Port=3306;Database={dbName};User=root;Password=YOUR_PASSWORD;",
+                "SQLite" => $"Data Source={dbName}.db",
+                _ => $"Server=(localdb)\\mssqllocaldb;Database={dbName};Trusted_Connection=True;MultipleActiveResultSets=true"
+            };
+        }
+
+        private void WriteAppSettings(string path, string database, string projectName)
+        {
+            var connStr = GetConnectionStringTemplate(database, projectName);
+            var content = $@"{{
+  ""Logging"": {{
+    ""LogLevel"": {{
+      ""Default"": ""Information"",
+      ""Microsoft.AspNetCore"": ""Warning""
+    }}
+  }},
+  ""AllowedHosts"": ""*"",
+  ""ConnectionStrings"": {{
+    ""DefaultConnection"": ""{connStr}""
+  }}
+}}";
+            File.WriteAllText(Path.Combine(path, "appsettings.json"), content);
         }
 
         private string GetEFCoreVersion(string netVersion)

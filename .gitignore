@@ -1,55 +1,63 @@
+# .NET Core / ASP.NET Core
 [Bb]in/
 [Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+publish/
+app.publish/
+dist/
+artifacts/
+TestResults/
+*.log
+logs/
 
-# Visual Studio files
+# Visual Studio / VS Code
 .vs/
-*.swp
-*.lut
-*.vshost.exe
-*.vshost.exe.config
-*.vshost.exe.manifest
-*.suo
+.vscode/
+.history/
 *.user
 *.userosscache
 *.sln.docstates
+*.suo
+*.orig
+*.swp
+*.lut
+*.vshost.*
+*.usersecrets
+UserSecrets/
 
-# Visual Studio Code files
-.vscode/
-
-# Build results
-[Dd]ebug/
-[Rr]elease/
-x64/
-x86/
-build/
-
-# Databases
+# Databases & Local Storage
 *.db
+*.db-shm
+*.db-wal
 *.sqlite
 *.sqlitedb
-
-# User-specific files
-*.rsuser
-*.suo
-*.user
-*.userintercept
-*.usernf
-
-# JetBrains Rider
-.idea/
-*.sln.iml
-
-# OS generated files
-.DS_Store
-Thumbs.db
-
-# Dotnet Core
-project.lock.json
-project.fragment.lock.json
-artifacts/
-
-# ASP.NET Core
 appsettings.Development.json
-# Secrets
 secrets.json
 .env
+
+# Tooling (Rider, Docker, OS)
+.idea/
+*.sln.iml
+.docker/
+.flattened
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Packaging & Dependencies
+node_modules/
+jspm_packages/
+.npm/
+.nuget/
+*.nupkg
+project.lock.json
+project.fragment.lock.json
+
+# Temporary / Backup
+backup/
+temp/
+tmp/
+*.tmp
+*.bak

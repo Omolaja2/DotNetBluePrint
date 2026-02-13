@@ -93,13 +93,22 @@ namespace DotNetBlueprint.Controllers
             }
             catch { /* Log error here if needed */ }
 
-            Response.Cookies.Append("fileDownload", "true", new Microsoft.AspNetCore.Http.CookieOptions { HttpOnly = false });
+            // Get token from request and set it in the response cookie
+            var downloadToken = Request.Form["DownloadToken"].ToString();
+            if (!string.IsNullOrEmpty(downloadToken))
+            {
+                Response.Cookies.Append("fileDownloadToken", downloadToken, new Microsoft.AspNetCore.Http.CookieOptions { 
+                    HttpOnly = false,
+                    Path = "/"
+                });
+            }
 
             return File(
                 zipBytes,
                 "application/zip",
                 $"{request.ProjectName}_{request.Architecture}.zip"
             );
+
         }
     }
 }
