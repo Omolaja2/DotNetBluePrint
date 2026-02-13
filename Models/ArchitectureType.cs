@@ -8,6 +8,8 @@ namespace DotNetBlueprint.Models
         MVVM,
         Microservices,
         Hexagonal,
-        CQRS
+        CQRS,
+        ProLayered
     }
 }
+

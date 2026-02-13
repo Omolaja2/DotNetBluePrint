@@ -43,116 +43,153 @@
                 }
                 else
                 {
-                    <a asp-controller="Home" asp-action="Index" class="btn-outline-premium text-decoration-none">
+                    <button type="button" class="btn-outline-premium" data-bs-toggle="modal" data-bs-target="#demoVideoModal">
                         <i class="bi bi-play-circle me-2"></i>
                         <span>Watch Demo</span>
-                    </a>
+                    </button>
                 }
             </div>
         </div>
     </div>
 </div>
 
-<div class="container py-5">
-    <!-- How It Works Section -->
-    <div class="text-center mb-5 mt-5 reveal-on-scroll">
-        <h2 class="fw-black title-gradient display-4 mb-3">Forging Process</h2>
-        <p class="text-muted fs-5">Go from concept to code in less than 60 seconds.</p>
-    </div>
-
-    <div class="row g-4 mb-5 pb-5">
-        <div class="col-md-4 text-center reveal-on-scroll" style="transition-delay: 0.1s;">
-            <div class="step-card">
-                <div class="step-number">01</div>
-                <h5 class="fw-800 mt-4">Select Template</h5>
-                <p class="small text-muted">Choose from Clean Architecture, CQRS, or classic Layered patterns designed by experts.</p>
+<!-- Video Demo Modal -->
+<div class="modal fade" id="demoVideoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content overflow-hidden" style="background: #000; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1);">
+            <div class="modal-header border-0 position-absolute w-100" style="z-index: 10; top: 0; right: 0;">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        </div>
-        <div class="col-md-4 text-center reveal-on-scroll" style="transition-delay: 0.2s;">
-            <div class="step-card">
-                <div class="step-number">02</div>
-                <h5 class="fw-800 mt-4">Configure Stack</h5>
-                <p class="small text-muted">Pick your .NET version and preferred database provider (SQL Server, PostgreSQL, etc.).</p>
-            </div>
-        </div>
-        <div class="col-md-4 text-center reveal-on-scroll" style="transition-delay: 0.3s;">
-            <div class="step-card">
-                <div class="step-number">03</div>
-                <h5 class="fw-800 mt-4">Instant Download</h5>
-                <p class="small text-muted">A perfectly organized .zip file with projects, solutions, and ready-to-run code is generated.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Detailed Features Section -->
-    <div class="row align-items-center mb-5 py-5 reveal-on-scroll">
-        <div class="col-lg-6">
-            <h2 class="display-5 fw-black mb-4">Why use <span class="text-primary">Blueprint Studio?</span></h2>
-            <div class="d-flex gap-3 mb-4">
-                <div class="feature-bullet"><i class="bi bi-check-lg"></i></div>
-                <div>
-                    <h6 class="fw-bold mb-1">Stay Productive</h6>
-                    <p class="small text-muted">Save up to 40 hours of initial setup time per project. We handle the boilerplate so you can focus on business logic.</p>
+            <div class="modal-body p-0">
+                <div class="ratio ratio-16x9">
+                    <!-- Using a high-quality .NET Minimal API / Architecture overview as a placeholder -->
+                    <iframe src="https://www.youtube.com/embed/YpXjAisW2pU?autoplay=0" 
+                            title="Blueprint Studio Demo" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen></iframe>
                 </div>
-            </div>
-            <div class="d-flex gap-3 mb-4">
-                <div class="feature-bullet"><i class="bi bi-check-lg"></i></div>
-                <div>
-                    <h6 class="fw-bold mb-1">Industry Standards</h6>
-                    <p class="small text-muted">Each blueprint follows Microsoft's best practices, including Dependency Injection, Logging, and Repository Patterns.</p>
-                </div>
-            </div>
-            <div class="d-flex gap-3">
-                <div class="feature-bullet"><i class="bi bi-check-lg"></i></div>
-                <div>
-                    <h6 class="fw-bold mb-1">Future Proof</h6>
-                    <p class="small text-muted">Fully compatible with the latest .NET ecosystems, ensuring your code remains relevant for years to come.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 mt-5 mt-lg-0">
-            <div class="p-5 rounded-lg position-relative reveal-on-scroll" style="background: var(--primary); color: #fff; border-radius: 40px; overflow: hidden; transition-delay: 0.2s;">
-                <div class="opacity-10 position-absolute" style="top: -20px; right: -20px; font-size: 15rem;">
-                    <i class="bi bi-hammer"></i>
-                </div>
-                <h3 class="fw-black mb-4">Ready to Build?</h3>
-                <p class="mb-4 text-white-50">Join hundreds of developers who have optimized their workflow with Blueprint Studio.</p>
-                <a asp-controller="Generator" asp-action="Create" class="btn btn-light rounded-pill px-4 py-2 fw-bold text-primary">Start Forging Now</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Features Grid -->
-    <div class="row g-4 mt-5 pt-5">
-        <div class="col-lg-4 col-md-6 reveal-on-scroll" style="transition-delay: 0.1s;">
-            <div class="feature-card-premium">
-                <div class="feature-icon-box">
-                    <i class="bi bi-shield-lock-fill"></i>
-                </div>
-                <h4 class="fw-bold mb-3">Enterprise Grade</h4>
-                <p class="text-muted">Production-ready architectures including Clean Architecture, Hexagonal, and DDD patterns out of the box.</p>
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-6 reveal-on-scroll" style="transition-delay: 0.2s;">
-            <div class="feature-card-premium">
-                <div class="feature-icon-box">
-                    <i class="bi bi-lightning-charge-fill"></i>
-                </div>
-                <h4 class="fw-bold mb-3">Instant Forge</h4>
-                <p class="text-muted">Zero configuration. Generate entire solution structures with pre-configured dependencies in seconds.</p>
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-12 reveal-on-scroll" style="transition-delay: 0.3s;">
-            <div class="feature-card-premium">
-                <div class="feature-icon-box">
-                    <i class="bi bi-box-seam-fill"></i>
-                </div>
-                <h4 class="fw-bold mb-3">Modern Stack</h4>
-                <p class="text-muted">Native support for the latest .NET versions, Entity Framework Core, and multiple database providers.</p>
             </div>
         </div>
     </div>
 </div>
+
+
+<div class="container py-5">
+    <!-- Turbo Engine Highlight -->
+    <div class="row align-items-center mb-5 py-5 reveal-on-scroll">
+        <div class="col-lg-5">
+            <div class="stats-card">
+                <div class="stats-icon"><i class="bi bi-cpu-fill"></i></div>
+                <h2 class="fw-black mb-3">Turbo Parallel Engine</h2>
+                <p class="text-muted">Our custom-built forging engine orchestrates multiple .NET CLI instances in parallel. Scaffolding complex solutions is now 5x faster.</p>
+                <div class="d-flex gap-3 mt-4">
+                    <div class="badge-pro">Concurrent I/O</div>
+                    <div class="badge-pro">Native SDK Calls</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="parallel-viz">
+                <div class="parallel-bar" style="--w: 90%; --d: 0.1s;"><span>Domain Layer</span></div>
+                <div class="parallel-bar" style="--w: 85%; --d: 0.2s;"><span>Application Layer</span></div>
+                <div class="parallel-bar" style="--w: 95%; --d: 0.3s;"><span>Infrastructure Layer</span></div>
+                <div class="parallel-bar" style="--w: 80%; --d: 0.4s;"><span>Presentation Layer</span></div>
+                <div class="parallel-bar" style="--w: 70%; --d: 0.5s;"><span>Gateway Layer</span></div>
+                <div class="parallel-status"><i class="bi bi-lightning-fill"></i> 480ms Simultaneous Forge</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supported Architectures Section -->
+    <div class="text-center mb-5 mt-5 reveal-on-scroll">
+        <span class="badge bg-primary-soft text-primary rounded-pill px-3 py-2 mb-3 fw-bold">ELITE PATTERNS</span>
+        <h2 class="fw-black title-gradient display-4 mb-3">Professional Blueprints</h2>
+        <p class="text-muted fs-5">Industry-standard foundations for any scale.</p>
+    </div>
+
+    <div class="row g-4 mb-5 pb-5">
+        <!-- Pro Layered -->
+        <div class="col-md-4 reveal-on-scroll" style="transition-delay: 0.1s;">
+            <div class="feature-card-pro">
+                <div class="pro-tag">POPULAR</div>
+                <i class="bi bi-diagram-3"></i>
+                <h5>Pro Layered</h5>
+                <p>The 4-tier standard: Presentation, Application, Data, and Gateway with strict separation.</p>
+            </div>
+        </div>
+        <!-- Clean Arch -->
+        <div class="col-md-4 reveal-on-scroll" style="transition-delay: 0.2s;">
+            <div class="feature-card-pro">
+                <i class="bi bi-layers-half"></i>
+                <h5>Clean Architecture</h5>
+                <p>Dependency-less domain core with infrastructure adapters and domain-centric logic.</p>
+            </div>
+        </div>
+        <!-- Microservices -->
+        <div class="col-md-4 reveal-on-scroll" style="transition-delay: 0.3s;">
+            <div class="feature-card-pro">
+                <i class="bi bi-grid-3x3-gap"></i>
+                <h5>Microservices</h5>
+                <p>Distributed system foundation with Identity, Ordering, and API Gateway components.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row align-items-center mb-5 py-5 reveal-on-scroll">
+        <div class="col-lg-6 order-2 order-lg-1">
+            <div class="p-5 rounded-lg position-relative reveal-on-scroll glass-box" style="background: var(--primary); color: #fff; border-radius: 40px; overflow: hidden; transition-delay: 0.2s;">
+                <div class="opacity-10 position-absolute" style="top: -20px; right: -20px; font-size: 15rem;">
+                    <i class="bi bi-hammer"></i>
+                </div>
+                <h3 class="fw-black mb-4">Zero Boilerplate. <br>Pure Logic.</h3>
+                <p class="mb-4 text-white-50">Join professional architects who focus on business value while we handle the foundation. Every forge includes CI/CD ready structure.</p>
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="icon-circle"><i class="bi bi-shield-check"></i></div>
+                    <span class="fw-bold">Pre-configured EF Core & DI</span>
+                </div>
+                <a asp-controller="Generator" asp-action="Create" class="btn btn-light rounded-pill px-4 py-2 fw-bold text-primary">Start Forging Now</a>
+            </div>
+        </div>
+        <div class="col-lg-6 order-1 order-lg-2 mb-5 mb-lg-0">
+            <h2 class="display-5 fw-black mb-4">Engineered for <span class="text-primary">Performance</span></h2>
+            <div class="d-flex gap-4 mb-4 feature-item">
+                <div class="feature-bullet-pro"><i class="bi bi-database-fill-gear"></i></div>
+                <div>
+                    <h5 class="fw-bold mb-1">Smart DB Injection</h5>
+                    <p class="text-muted">Automatic connection string setup for SQL Server, PostgreSQL, MySQL or SQLite based on your choice.</p>
+                </div>
+            </div>
+            <div class="d-flex gap-4 mb-4 feature-item">
+                <div class="feature-bullet-pro"><i class="bi bi-git"></i></div>
+                <div>
+                    <h5 class="fw-bold mb-1">PRO .gitignore</h5>
+                    <p class="text-muted">Repository-ready filters ensure your source control stays clean from binary artifacts and secrets.</p>
+                </div>
+            </div>
+            <div class="d-flex gap-4 feature-item">
+                <div class="feature-bullet-pro"><i class="bi bi-rocket-takeoff-fill"></i></div>
+                <div>
+                    <h5 class="fw-bold mb-1">Ready to Deploy</h5>
+                    <p class="text-muted">Every blueprint is structure-tested and ready for Containerization or Cloud deployment.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tech Arsenal -->
+    <div class="text-center py-5 reveal-on-scroll">
+        <h4 class="text-muted fw-bold mb-4 ls-2">TECH ARSENAL</h4>
+        <div class="d-flex flex-wrap justify-content-center gap-5 tech-icons">
+            <div class="tech-item"><i class="bi bi-dot"></i> .NET 9.0</div>
+            <div class="tech-item"><i class="bi bi-box"></i> EF Core</div>
+            <div class="tech-item"><i class="bi bi-hdd-network"></i> SQL Server</div>
+            <div class="tech-item"><i class="bi bi-infinity"></i> CI/CD Ready</div>
+            <div class="tech-item"><i class="bi bi-shield-lock"></i> Identity</div>
+        </div>
+    </div>
+</div>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -171,8 +208,20 @@
         document.querySelectorAll('.reveal-on-scroll').forEach(el => {
             observer.observe(el);
         });
+
+        // Stop video when modal closes
+        const demoModal = document.getElementById('demoVideoModal');
+        if (demoModal) {
+            demoModal.addEventListener('hidden.bs.modal', function () {
+                const iframe = demoModal.querySelector('iframe');
+                const src = iframe.src;
+                iframe.src = '';
+                iframe.src = src;
+            });
+        }
     });
 </script>
+
 
 <style>
     .step-card {
@@ -212,4 +261,171 @@
         flex-shrink: 0;
         font-weight: 900;
     }
+
+    /* New Landing Page Styles */
+    .bg-primary-soft { background: rgba(92, 59, 46, 0.08); }
+    
+    .stats-card {
+        background: #fff;
+        padding: 3rem;
+        border-radius: 40px;
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-lg);
+    }
+    
+    .stats-icon {
+        width: 60px;
+        height: 60px;
+        background: var(--primary);
+        color: #fff;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .badge-pro {
+        padding: 0.5rem 1rem;
+        background: var(--bg-light);
+        color: var(--primary);
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        border: 1px solid var(--border-color);
+    }
+
+    .parallel-viz {
+        background: var(--primary-dark);
+        padding: 3rem;
+        border-radius: 40px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .parallel-bar {
+        height: 45px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        padding: 0 1.5rem;
+        color: rgba(255,255,255,0.7);
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+    
+    .parallel-bar::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: var(--w);
+        background: linear-gradient(90deg, var(--accent), var(--primary-light));
+        opacity: 0.4;
+        animation: barGrow 2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite alternate;
+        animation-delay: var(--d);
+    }
+    
+    @@keyframes barGrow {
+        0% { transform: scaleX(0.8); transform-origin: left; }
+        100% { transform: scaleX(1.1); transform-origin: left; }
+    }
+    
+    .parallel-status {
+        margin-top: 2rem;
+        color: var(--accent);
+        font-weight: 800;
+        font-family: monospace;
+    }
+
+    .feature-card-pro {
+        background: #fff;
+        padding: 2.5rem;
+        border-radius: 30px;
+        border: 1px solid var(--border-color);
+        transition: var(--transition);
+        height: 100%;
+        position: relative;
+    }
+    
+    .feature-card-pro:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--primary);
+    }
+    
+    .feature-card-pro i {
+        font-size: 2.5rem;
+        color: var(--primary);
+        display: block;
+        margin-bottom: 1.5rem;
+    }
+    
+    .feature-card-pro h5 { font-weight: 900; margin-bottom: 1rem; }
+    
+    .pro-tag {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: var(--accent);
+        color: var(--primary-dark);
+        font-size: 0.75rem;
+        font-weight: 900;
+        padding: 0.2rem 0.8rem;
+        border-radius: 50px;
+    }
+
+    .icon-circle {
+        width: 48px;
+        height: 48px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+    }
+    
+    .feature-bullet-pro {
+        width: 50px;
+        height: 50px;
+        background: #fff;
+        border: 1px solid var(--border-color);
+        color: var(--primary);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        flex-shrink: 0;
+        box-shadow: var(--shadow-sm);
+    }
+    
+    .feature-item:hover .feature-bullet-pro {
+        background: var(--primary);
+        color: #fff;
+        transform: scale(1.1) rotate(5deg);
+        transition: var(--transition);
+    }
+
+    .tech-item {
+        font-weight: 800;
+        font-size: 1.5rem;
+        color: var(--text-muted);
+        opacity: 0.5;
+        transition: var(--transition);
+    }
+    
+    .tech-item:hover {
+        opacity: 1;
+        color: var(--primary);
+        transform: translateY(-5px);
+    }
 </style>
+

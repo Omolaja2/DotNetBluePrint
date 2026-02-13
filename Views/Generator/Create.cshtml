@@ -132,6 +132,17 @@
                         <h4>CQRS</h4>
                         <p>Command Query Responsibility Segregation for complex apps.</p>
                     </div>
+
+                    <!-- Pro Layered -->
+                    <div class="arch-card" onclick="selectArch('ProLayered', this)">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="arch-icon"><i class="bi bi-diagram-3-fill"></i></div>
+                            <div class="select-indicator"><i class="bi bi-check-circle-fill"></i></div>
+                        </div>
+                        <h4>Pro Layered</h4>
+                        <p>Premium 4-Layer setup (Presentation, Application, Data, Gateway).</p>
+                    </div>
+
                 </div>
                 <input type="hidden" asp-for="Architecture" id="selectedArch" value="CleanArchitecture" />
             </div>
@@ -176,6 +187,7 @@
                 <span>FORGE ARCHITECTURE</span>
                 <i class="bi bi-hammer ms-2"></i>
             </button>
+            <input type="hidden" name="DownloadToken" id="downloadTokenInput" value="" />
         </form>
     </div>
 </div>
@@ -188,6 +200,7 @@
                 <i class="bi bi-check-circle-fill"></i>
             </div>
             <p id="loadingStatus" class="loading-text">Forging Your Architecture...</p>
+            <p id="timeElapsed" class="text-muted mb-2 fw-bold" style="font-size: 0.9rem;">Time: 0s</p>
             <p id="loadingSubtext" class="text-muted small">Please wait while we assemble your blueprint.</p>
         </div>
     </div>
@@ -228,14 +241,35 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // If there's a validation error, show the error modal automatically
+            // Error handling
             if ('@ViewData.ModelState.IsValid' === 'False') {
                 document.getElementById('errorModal').style.display = 'flex';
+            }
+
+            // Architecture init
+            const currentArch = document.getElementById('selectedArch').value;
+            if(currentArch) {
+                const cards = document.querySelectorAll('.arch-card');
+                cards.forEach(c => {
+                    if(c.getAttribute('onclick').includes("'" + currentArch + "'")) {
+                        c.classList.add('selected');
+                    }
+                });
+            }
+
+            // Database init
+            const currentDb = document.getElementById('selectedDb').value;
+            if(currentDb) {
+                const dbCards = document.querySelectorAll('.db-card');
+                dbCards.forEach(c => {
+                    if(c.getAttribute('onclick').includes("'" + currentDb + "'")) {
+                        c.classList.add('selected');
+                    }
+                });
             }
         });
 
         function selectArch(val, el) {
-
             document.querySelectorAll('.arch-card').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
             document.getElementById('selectedArch').value = val;
@@ -248,53 +282,66 @@
         }
 
         document.getElementById('genForm').addEventListener('submit', function() {
-            // Reset overlay state
             const overlay = document.getElementById('loadingOverlay');
             const spinner = document.getElementById('loadingSpinner');
             const success = document.getElementById('successIcon');
             const status = document.getElementById('loadingStatus');
             const subtext = document.getElementById('loadingSubtext');
+            const timeCounter = document.getElementById('timeElapsed');
+
+            const token = "forge_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+            document.getElementById('downloadTokenInput').value = token;
 
             overlay.style.display = 'flex';
             overlay.classList.remove('success-bg');
             spinner.style.display = 'block';
             success.style.display = 'none';
             status.innerText = "Forging Your Architecture...";
+            status.style.color = "";
             subtext.innerText = "Please wait while we assemble your blueprint.";
-
-            // Clear existing cookie
-            document.cookie = "fileDownload=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
             
-            // Check for cookie return every 500ms
+            let seconds = 0;
+            timeCounter.innerText = "Time: 0s";
+            const timer = setInterval(() => {
+                seconds++;
+                timeCounter.innerText = `Time: ${seconds}s`;
+                if (seconds === 15) subtext.innerText = "Applying architectural patterns...";
+                if (seconds === 30) subtext.innerText = "Configuring cross-project references...";
+                if (seconds === 45) subtext.innerText = "Injecting database connection strings...";
+                if (seconds === 60) subtext.innerText = "Almost done! Heavy lifting in progress...";
+            }, 1000);
+
             const checkCookie = setInterval(() => {
-                if (document.cookie.split(';').some((item) => item.trim().startsWith('fileDownload='))) {
+                const cookieValue = document.cookie
+                    .split('; ')
+                    .find(row => row.startsWith('fileDownloadToken='))
+                    ?.split('=')[1];
+
+                if (cookieValue === token) {
                     clearInterval(checkCookie);
+                    clearInterval(timer);
                     
-                    // Show "Generated" State
                     overlay.classList.add('success-bg');
                     spinner.style.display = 'none';
                     success.style.display = 'block';
                     status.innerText = "Generated!";
                     status.style.color = "#28a745";
                     subtext.innerText = "Your blueprint has been forged and downloaded.";
+                    document.cookie = "fileDownloadToken=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
 
-                    // Clean up cookie
-                    document.cookie = "fileDownload=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-
-                    // Hide after 2 seconds
                     setTimeout(() => {
                         fadeOut(overlay);
-                    }, 2000);
+                    }, 2500);
                 }
             }, 500);
 
-            // Safety timeout (45 seconds)
             setTimeout(() => {
                 if (overlay.style.display === 'flex' && spinner.style.display !== 'none') {
                     overlay.style.display = 'none';
                     clearInterval(checkCookie);
+                    clearInterval(timer);
                 }
-            }, 45000);
+            }, 600000);
         });
 
         function fadeOut(el) {
@@ -308,32 +355,5 @@
                 }
             })();
         }
-
-
-        document.addEventListener('DOMContentLoaded', () => {
-             // Architecture init
-             const currentArch = document.getElementById('selectedArch').value;
-             if(currentArch) {
-                 const cards = document.querySelectorAll('.arch-card');
-                 cards.forEach(c => {
-                     if(c.getAttribute('onclick').includes("'" + currentArch + "'")) {
-                         c.classList.add('selected');
-                         c.click();
-                     }
-                 });
-             }
-
-             // Database init
-             const currentDb = document.getElementById('selectedDb').value;
-             if(currentDb) {
-                 const dbCards = document.querySelectorAll('.db-card');
-                 dbCards.forEach(c => {
-                     if(c.getAttribute('onclick').includes("'" + currentDb + "'")) {
-                         c.classList.add('selected');
-                         c.click();
-                     }
-                 });
-             }
-        });
     </script>
 }
